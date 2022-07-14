@@ -4,3 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
+.icon {
+    @apply w-5 h-5 fill-text-body;
+}
