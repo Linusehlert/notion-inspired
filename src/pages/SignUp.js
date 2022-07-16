@@ -1,27 +1,21 @@
 import {useState} from "react";
-import {useNavigate} from "react-router-dom";
 //firebase
-import {useGoogle} from "../hooks/useSignup";
-import {useSignup} from "../hooks/useGoogle";
+import {useSignup} from "../hooks/useSignup";
 
 export default function SignUp() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [displayName, setDisplayName] = useState("");
-    const {signup, error} = useSignup();
-    const {googleSignIn, error: err} = useGoogle();
-    const navigate = useNavigate();
+    const {connectGoogle, signup, isPending, error} = useSignup();
 
     const handleClick = (e) => {
         e.preventDefault();
-        googleSignIn()
-        if (!err) navigate("/");
+        connectGoogle();
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
         signup(email, password, displayName);
-        if (!error) navigate("/");
     }
 
     return (
@@ -30,7 +24,7 @@ export default function SignUp() {
                 <h2 className="text-center text-5xl font-bold mb-8">Sign Up</h2>
                 {/*Google Auth*/}
                 <div className="flex justify-center border-b border-line">
-                    <button onClick={handleClick}
+                    <button onClick={handleClick} disabled={isPending}
                             className=" flex items-center justify-center bg-white w-[350px] p-1.5 my-5 text-text-head font-semibold border border-light rounded
                             focus:bg-gray">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="w-4 h-4 mr-2">
@@ -66,14 +60,14 @@ export default function SignUp() {
                                placeholder={"Enter Name..."}
                                className="bg-gray w-[350px] py-1.5 px-3 my-1 border border-light rounded"/>
                     </label>
-                    <button type="submit"
+                    <button type="submit" disabled={isPending}
                             className="w-[350px] py-1.5 mt-3  font-semibold border border-light rounded
                             focus:bg-gray">
                         Sign Up with email
                     </button>
                 </form>
-                {/*Some small Text to make it look professional*/}
                 {error && <p className="text-red-500 text-sm">{error}</p>}
+                {/*Some small Text to make it look professional*/}
             </div>
             <p className="text-center text-xs text-text-light mt-28 w-[500px]">By clicking “Continue with Google” or
                 “Sign Up with email” above, you acknowledge that you have read and

@@ -7,11 +7,13 @@ export const AuthContext = createContext();
 export const authReducer = (state, action) => {
     switch (action.type) {
         case 'LOGIN':
+            console.log(action.payload)
             return {
                 ...state,
-                user: action.payload
+                user: action.payload,
             };
         case 'LOGOUT':
+            console.log(action.payload)
             return {
                 ...state,
                 user: null
@@ -25,11 +27,13 @@ export const authReducer = (state, action) => {
     }
 }
 
-export const AuthProvider = ({children}) => {
+export const AuthContextProvider = ({children}) => {
     const [state, dispatch] = useReducer(authReducer, {
         user: null,
         authIsReady: false
     });
+
+    console.log(state)
 
     useEffect(() => {
         const unsub = onAuthStateChanged(auth, user => {
@@ -39,7 +43,7 @@ export const AuthProvider = ({children}) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{state, dispatch}}>
+        <AuthContext.Provider value={{...state, dispatch}}>
             {children}
         </AuthContext.Provider>
     );

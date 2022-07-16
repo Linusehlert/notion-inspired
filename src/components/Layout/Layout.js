@@ -4,7 +4,7 @@ import Sidebar from "./Sidebar/Sidebar";
 
 export default function Layout() {
     return (
-        <div>
+        <div className="flex">
             <Sidebar/>
             <Outlet/>
         </div>
