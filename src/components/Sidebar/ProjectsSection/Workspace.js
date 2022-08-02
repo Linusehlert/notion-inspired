@@ -11,7 +11,7 @@ export const Workspace = () => {
   const { userId } = useSelector((state) => state.user);
 
   //firestore
-  const { addDocument: addProject } = useFirestore("projects");
+  const { addProject: addProject } = useFirestore("projects");
   const { documents: projects } = useCollection(
     query(
       collection(db, "projects"),

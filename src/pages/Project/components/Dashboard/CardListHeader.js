@@ -19,7 +19,6 @@ export const CardListHeader = ({ index }) => {
   const { projectGroups, projectId } = useSelector((state) => state.project);
   const { updateDocument: updateProject } = useFirestore("projects");
 
-  console.log(group.title);
   //open Input for editing title
   const editTitle = () => {
     setNewTitle(group && group.title);

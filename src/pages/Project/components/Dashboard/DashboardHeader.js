@@ -1,5 +1,4 @@
 export const DashboardHeader = () => {
-  console.log("DashboardHeader");
   return (
     <div className="border-neutral-150 box-border flex overflow-hidden border-b">
       {/*Views*/}

@@ -1,18 +1,21 @@
+import { useTask } from "../../hooks/firestore/useTask";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { useRef } from "react";
 import ReactDOM from "react-dom";
+import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export const TaskModal = () => {
   const modalRef = useRef();
   const navigate = useNavigate();
-
+  const { projectId } = useSelector((state) => state.project);
   const { pathname } = useLocation();
-  const id = pathname.substring(0, pathname.lastIndexOf("/"));
-  console.log(id);
+  const taskId = pathname.substring(22, pathname.length);
+  const { isPending, error, task } = useTask(taskId);
+
   // close modal when click outside
   useClickOutside(modalRef, () => {
-    navigate(id, { replace: true });
+    navigate("/" + projectId, { replace: true });
   });
 
   return ReactDOM.createPortal(
@@ -45,7 +48,7 @@ export const TaskModal = () => {
             <p className="font-normal">
               {document.title} /{" "}
               <span className="font-semibold text-neutral-700">
-                Presentation
+                {task && task.title}
               </span>
             </p>
             {/*options*/}
@@ -86,7 +89,7 @@ export const TaskModal = () => {
           </div>
           {/*title*/}
           <h3 className="mt-1 mb-3 px-3 text-3xl font-bold text-neutral-700">
-            UI Animation
+            {task && task.title}
           </h3>
           {/*properties*/}
           <div className=" flex flex-col p-2 text-sm text-neutral-500">
@@ -109,7 +112,7 @@ export const TaskModal = () => {
               </div>
               {/*value*/}
               <div className="ml-2 flex w-full cursor-pointer items-center rounded px-2 py-1 font-normal text-neutral-700 hover:bg-neutral-200">
-                Presentation
+                {task && task.label}
               </div>
             </div>
             {/*Assignee*/}
@@ -128,7 +131,7 @@ export const TaskModal = () => {
               </div>
               {/*value*/}
               <div className="ml-2 flex w-full cursor-pointer items-center rounded px-2 py-1 font-normal text-neutral-700 hover:bg-neutral-200">
-                Jan Pillemann Atze
+                {task && task.assignees.map((assignee) => assignee.name)}
               </div>
             </div>
             {/*Status*/}
@@ -152,7 +155,7 @@ export const TaskModal = () => {
               </div>
               {/*React Select*/}
               <div className="ml-2 flex w-full cursor-pointer items-center rounded px-2 py-1 font-normal text-neutral-700 hover:bg-neutral-200">
-                Next Up
+                {task && task.status}
               </div>
             </div>
             {/*Priority*/}
@@ -175,7 +178,7 @@ export const TaskModal = () => {
               </div>
               {/*React Select*/}
               <div className="ml-2 flex w-full cursor-pointer items-center rounded px-2 py-1 font-normal text-neutral-700 hover:bg-neutral-200">
-                High
+                {task && task.priority}
               </div>
             </div>
           </div>

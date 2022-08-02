@@ -14,7 +14,7 @@ export const GroupList = () => {
       groups: arrayUnion({
         title: "untitled",
         bgColor: randomBgColor,
-        cards: [],
+        tasks: [],
       }),
     });
   };

@@ -41,8 +41,6 @@ function App() {
       unsub();
     });
   });
-  console.log(userName);
-
   return (
     <>
       {authReady && (

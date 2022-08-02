@@ -13,7 +13,6 @@ export default function Project() {
   //firestore
   // const { isPending, error } = useDocument("projects", id);
   //
-  console.log("Project");
   //
   // if (error) {
   //   return (

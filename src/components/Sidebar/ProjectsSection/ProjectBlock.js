@@ -58,6 +58,7 @@ export const ProjectBlock = ({ project }) => {
             Are you sure? The Project will be deleted! This action cannot be
             undone.
           </h1>
+          {/*TODO delete subcollections*/}
           <button
             onClick={() => deleteProject(project.id)}
             className="mt-6 w-full rounded border border-red-400 py-1 text-sm text-red-500

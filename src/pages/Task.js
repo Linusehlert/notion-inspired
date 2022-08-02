@@ -7,5 +7,9 @@ export const Task = () => {
 
   if (view == "center") return <TaskModal />;
 
+  //TODO add Card Side View
+
+  //TODO add Card Page View
+
   // if (view == "page") return <TaskPage />;
 };

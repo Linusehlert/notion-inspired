@@ -10,17 +10,15 @@ export const Header = () => {
   const id =
     pathname.length >= 22
       ? pathname.substring(1, pathname.lastIndexOf("/"))
-      : pathname;
+      : pathname.slice(1);
 
   useDocument("projects", id);
   const inputRef = useRef();
   const { projectTitle } = useSelector((state) => state.project);
   const { updateDocument: updateProject } = useFirestore("projects");
 
-  console.log("Header");
-
   const updateTitle = () => {
-    if (title !== "") updateProject(id, { title: title });
+    if (title && title !== "") updateProject(id, { title: title });
     else {
       setTitle(projectTitle);
     }
