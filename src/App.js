@@ -5,7 +5,7 @@ import { auth } from "./firebase/config";
 import Login from "./pages/Auth/Login";
 import SignUp from "./pages/Auth/SignUp";
 import Project from "./pages/Project/Project";
-import { Task } from "./pages/Task";
+import { Task } from "./pages/Task/Task";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";

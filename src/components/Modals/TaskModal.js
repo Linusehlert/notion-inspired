@@ -1,19 +1,53 @@
 import { useClickOutside } from "../../hooks/useClickOutside";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useFirestore } from "../../hooks/firestore/useFirestore";
+import { TaskTitle } from "../../pages/Task/components/TaskTitle";
+import { TaskLabel } from "../../pages/Task/components/TaskLabel.";
+import { TaskStatus } from "../../pages/Task/components/TaskStatus";
 
-export const TaskModal = () => {
+export const TaskModal = ({ task, taskIndex, groupIndex }) => {
+  const [priority, setPriority] = useState("");
   const modalRef = useRef();
   const navigate = useNavigate();
+  const { projectTitle, projectGroups, projectId } = useSelector(
+    (state) => state.project
+  );
+
+  const { updateDocument: updateProject } = useFirestore("projects");
 
   const { pathname } = useLocation();
   const id = pathname.substring(0, pathname.lastIndexOf("/"));
-  console.log(id);
+
+  const updatePriority = () => {
+    let newTask = structuredClone(task);
+    newTask.priority = priority;
+    updateTask(newTask);
+  };
+
+  const updateTask = (newTask) => {
+    const newGroups = structuredClone(projectGroups);
+    let newGroup = structuredClone(newGroups[groupIndex]);
+    const newTasks = structuredClone(newGroup.tasks);
+    newTasks[taskIndex] = newTask;
+    newGroups[groupIndex] = { ...newGroup, tasks: newTasks };
+    console.log(newGroups);
+    updateProject(projectId, {
+      groups: newGroups,
+    });
+  };
   // close modal when click outside
   useClickOutside(modalRef, () => {
     navigate(id, { replace: true });
   });
+
+  useEffect(() => {
+    if (task) {
+      setPriority(task.priority);
+    }
+  }, [task]);
 
   return ReactDOM.createPortal(
     <div className="col z-999 fixed inset-0 flex flex items-center justify-center bg-black/50">
@@ -43,9 +77,9 @@ export const TaskModal = () => {
             </button>
             {/*path*/}
             <p className="font-normal">
-              {document.title} /{" "}
+              {projectTitle} /{" "}
               <span className="font-semibold text-neutral-700">
-                Presentation
+                {task && task.label}
               </span>
             </p>
             {/*options*/}
@@ -85,33 +119,11 @@ export const TaskModal = () => {
             </div>
           </div>
           {/*title*/}
-          <h3 className="mt-1 mb-3 px-3 text-3xl font-bold text-neutral-700">
-            UI Animation
-          </h3>
+          <TaskTitle task={task} updateTask={updateTask} />
           {/*properties*/}
           <div className=" flex flex-col p-2 text-sm text-neutral-500">
-            <div className="mb-1 flex">
-              {/*property*/}
-              <div className="flex w-40 cursor-pointer items-center rounded py-1 px-1  hover:bg-neutral-200">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-3.5 w-3.5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <p className="ml-2 ">Label</p>
-              </div>
-              {/*value*/}
-              <div className="ml-2 flex w-full cursor-pointer items-center rounded px-2 py-1 font-normal text-neutral-700 hover:bg-neutral-200">
-                Presentation
-              </div>
-            </div>
+            {/*Label*/}
+            <TaskLabel task={task} updateTask={updateTask} />
             {/*Assignee*/}
             <div className="mb-1 flex">
               {/*property*/}
@@ -124,37 +136,15 @@ export const TaskModal = () => {
                 >
                   <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
                 </svg>
-                <p className="ml-2 ">Assignee</p>
+                <p className="ml-2 ">Assignees</p>
               </div>
               {/*value*/}
               <div className="ml-2 flex w-full cursor-pointer items-center rounded px-2 py-1 font-normal text-neutral-700 hover:bg-neutral-200">
-                Jan Pillemann Atze
+                {task && task.assignees && task.assignees[0].name}
               </div>
             </div>
             {/*Status*/}
-            <div className="mb-1 flex">
-              {/*property*/}
-              <div className="flex w-40 cursor-pointer items-center rounded py-1 px-1  hover:bg-neutral-200">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-3.5 w-3.5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                  <path
-                    fillRule="evenodd"
-                    d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <p className="ml-2 ">Status</p>
-              </div>
-              {/*React Select*/}
-              <div className="ml-2 flex w-full cursor-pointer items-center rounded px-2 py-1 font-normal text-neutral-700 hover:bg-neutral-200">
-                Next Up
-              </div>
-            </div>
+            <TaskStatus task={task} updateTask={updateTask} />
             {/*Priority*/}
             <div className="mb-1 flex">
               {/*property*/}
@@ -175,7 +165,7 @@ export const TaskModal = () => {
               </div>
               {/*React Select*/}
               <div className="ml-2 flex w-full cursor-pointer items-center rounded px-2 py-1 font-normal text-neutral-700 hover:bg-neutral-200">
-                High
+                {task && task.priority}
               </div>
             </div>
           </div>
@@ -189,7 +179,7 @@ export const TaskModal = () => {
             Comments
             {/*comment count*/}
             <div className="ml-2 flex items-center rounded bg-blue-500/30 px-1.5 text-xs">
-              2
+              {task && task.comments && task.comments.length}
             </div>
           </li>
         </ul>

@@ -2,7 +2,7 @@ export const DashboardHeader = () => {
   console.log("DashboardHeader");
   return (
     <div className="border-neutral-150 box-border flex overflow-hidden border-b">
-      {/*Views*/}
+      {/*views*/}
       <ul className="flex items-center pl-12">
         <li className="box-border cursor-pointer border-b-2 border-blue-500 pb-2 text-blue-500 hover:border-b-2 hover:border-blue-500 hover:text-blue-500">
           By Status

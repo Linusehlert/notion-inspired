@@ -14,11 +14,11 @@ export const CardList = ({ id, index }) => {
   const navigate = useNavigate();
 
   // add card to group
-  const addCard = () => {
+  const addTask = () => {
     // clone and update the groups property
     const newGroups = structuredClone(projectGroups);
     let newGroup = structuredClone(group);
-    const newCards = structuredClone(group.cards);
+    const newTasks = structuredClone(group.tasks);
     const id = uuid();
     const newCard = {
       title: "untitled",
@@ -30,9 +30,8 @@ export const CardList = ({ id, index }) => {
       description: "",
       comments: [],
     };
-    newGroup = { ...newGroup, cards: [...newCards, newCard] };
-    newGroups[index] = { ...newGroup, cards: [...newCards, newCard] };
-    newCards.push(newCard);
+    newTasks.push(newCard);
+    newGroups[index] = { ...newGroup, tasks: newTasks };
     // update the project
     updateProject(projectId, {
       groups: newGroups,
@@ -47,13 +46,13 @@ export const CardList = ({ id, index }) => {
       <div className="flex w-60 flex-col overflow-y-auto">
         {/*card list*/}
         {group &&
-          group.cards &&
-          group.cards.map((card, index) => (
-            <Card key={index} location={location} id={id} task={card} />
+          group.tasks &&
+          group.tasks.map((task, index) => (
+            <Card key={index} location={location} id={id} task={task} />
           ))}
         {/*button to add new card*/}
         <button
-          onClick={addCard}
+          onClick={addTask}
           className="flex cursor-pointer items-center justify-center rounded border border-dashed border-neutral-300 py-1
                 text-neutral-600 hover:bg-neutral-200 hover:text-neutral-700"
         >

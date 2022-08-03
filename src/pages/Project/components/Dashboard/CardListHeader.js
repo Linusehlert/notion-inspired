@@ -126,7 +126,7 @@ export const CardListHeader = ({ index }) => {
       )}
       {/*card count*/}
       <div className="ml-2 flex items-center rounded bg-white/30 px-1.5 text-xs">
-        {group && group.cards && group.cards.length ? group.cards.length : 0}
+        {group && group.tasks && group.tasks.length ? group.tasks.length : 0}
       </div>
       {/*dots button to open options*/}
       <button
