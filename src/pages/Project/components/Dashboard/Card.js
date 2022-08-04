@@ -1,8 +1,30 @@
 import { Link, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { useState } from "react";
 
 export const Card = ({ task, id }) => {
+  const [color, setColor] = useState("");
   const location = useLocation();
-
+  useEffect(() => {
+    if (task) {
+      switch (task.priority) {
+        case "Low":
+          setColor("bg-green-100 text-green-500");
+          break;
+        case "Mid":
+          setColor("bg-yellow-100 text-yellow-600");
+          break;
+        case "High":
+          setColor("bg-red-100 text-red-600");
+          break;
+        case "None":
+          setColor("bg-indigo-100 text-indigo-500");
+          break;
+        default:
+          setColor("bg-indigo-100 text-indigo-500");
+      }
+    }
+  }, [task]);
   return (
     <Link
       to={`${task.id}?view=center`}
@@ -17,11 +39,11 @@ export const Card = ({ task, id }) => {
         {task && task.title}
       </h3>
       {/*Description*/}
-      <p className="mb-3 font-normal text-neutral-500">{task && task.id}</p>
+      {/*<p className="mb-3 font-normal text-neutral-500">{task && task.id}</p>*/}
       {/*Assignes and priority*/}
       <div className="border-neutral-150 flex items-center border-b pb-3">
         {/*<div className="mr-2 h-5 w-5 rounded-full  bg-neutral-300" />*/}
-        <div className="rounded  bg-yellow-500/20 px-1.5 text-xs font-normal text-yellow-600">
+        <div className={`${color} rounded  px-1.5 text-xs font-normal`}>
           {task && task.priority.length && task.priority}
         </div>
       </div>

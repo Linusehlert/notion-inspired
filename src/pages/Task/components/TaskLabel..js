@@ -47,7 +47,7 @@ export const TaskLabel = ({ task, updateTask }) => {
         onChange={(e) => setLabel(e.target.value)}
         value={label}
         placeholder={task && task.label}
-        className="ml-2 flex w-full cursor-pointer items-center rounded px-2 py-1 font-normal text-neutral-700 outline-none hover:bg-neutral-200"
+        className="ml-2 flex w-full cursor-pointer items-center rounded px-2 py-1 font-normal text-neutral-700 outline-none hover:bg-neutral-200 "
       ></input>
     </div>
   );

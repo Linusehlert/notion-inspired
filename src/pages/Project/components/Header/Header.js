@@ -1,79 +1,16 @@
-import { useDocument } from "../../../../hooks/firestore/useDocument";
-import { useFirestore } from "../../../../hooks/firestore/useFirestore";
-import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { TeamMembers } from "./TeamMembers";
+import { ProjectTitle } from "./ProjectTitle";
 
 export const Header = () => {
-  const [title, setTitle] = useState("");
-  const { pathname } = useLocation();
-  const id =
-    pathname.length >= 22
-      ? pathname.substring(1, pathname.lastIndexOf("/"))
-      : pathname;
-
-  useDocument("projects", id);
-  const inputRef = useRef();
-  const { projectTitle } = useSelector((state) => state.project);
-  const { updateDocument: updateProject } = useFirestore("projects");
-
-  console.log("Header");
-
-  const updateTitle = () => {
-    if (title !== "") updateProject(id, { title: title });
-    else {
-      setTitle(projectTitle);
-    }
-  };
-
-  useEffect(() => {
-    if (projectTitle) setTitle(projectTitle);
-  }, [projectTitle]);
-
   return (
     <div>
       <div className="w-100 max-w-screen px-12 pt-6">
         <div className="flex items-center">
           {/*Title Input*/}
-          <input
-            ref={inputRef}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                inputRef.current.blur();
-              }
-            }}
-            onBlur={updateTitle}
-            onChange={(e) => setTitle(e.target.value)}
-            value={title}
-            placeholder={projectTitle}
-            className="h-12 w-[calc(100vw-22rem)] grow-0 text-4xl font-bold text-neutral-700 outline-none md:w-[calc(100vw-40rem)]"
-          ></input>
+          <ProjectTitle />
           <div className="shrink-1 z-101 ml-auto flex grow-0">
             {/*Team Members*/}
-            <div className="border-neutral-150 flex border-r pr-4 ">
-              <div className="flex">
-                <div className="h-8 w-8 rounded-3xl bg-neutral-300" />
-                <div className="h-8 w-8 rounded-3xl bg-neutral-300" />
-              </div>
-              <button
-                className="ml-2   flex items-center rounded-3xl bg-blue-100 px-3 font-semibold text-blue-500
-                        hover:bg-blue-200 hover:text-blue-600"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="mr-2 h-4 w-4"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                Invite
-              </button>
-            </div>
+            <TeamMembers />
             {/*Dark Mode*/}
             <div className="ml-4 flex rounded-3xl bg-neutral-200 p-1">
               <button className="mr-1 rounded-3xl bg-white py-1 px-1.5 text-blue-500">

@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useRef } from "react";
 import { useClickOutside } from "../../../hooks/useClickOutside";
+import { useFirestore } from "../../../hooks/firestore/useFirestore";
 
-export const TaskStatus = ({ task, updateTask }) => {
+export const TaskStatus = ({ task, groupIndex, taskIndex }) => {
   const [status, setStatus] = useState({
     title: "untitled",
     bgColor: "bg-green-500",
@@ -11,26 +12,44 @@ export const TaskStatus = ({ task, updateTask }) => {
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
   const inputRef = useRef();
 
-  const { projectGroups } = useSelector((state) => state.project);
+  const { updateDocument: updateProject } = useFirestore("projects");
 
-  const updateStatus = () => {
-    let newTask = structuredClone(task);
-    newTask.status = status;
-    updateTask(newTask);
+  const { projectGroups, projectId } = useSelector((state) => state.project);
+
+  const updateStatus = (newGroupIndex) => {
+    //remove task from group
+    const newGroups = structuredClone(projectGroups);
+    let oldGroup = structuredClone(newGroups[groupIndex]);
+    const oldTasks = structuredClone(oldGroup.tasks);
+    oldTasks.splice(taskIndex, 1);
+    newGroups[groupIndex] = { ...oldGroup, tasks: oldTasks };
+    console.log(oldTasks);
+    //add task to new group
+
+    const newTasks = structuredClone(newGroups[newGroupIndex].tasks);
+    newTasks.push(task);
+    newGroups[newGroupIndex] = { ...newGroups[newGroupIndex], tasks: newTasks };
+
+    updateProject(projectId, {
+      groups: newGroups,
+    });
   };
 
   useClickOutside(inputRef, () => {
     setIsOptionsOpen(false);
   });
 
-  // useEffect(() => {
-  //   if (task) {
-  //     setStatus(task.status);
-  //   }
-  // }, [task]);
+  useEffect(() => {
+    if (projectGroups[groupIndex]) {
+      setStatus({
+        title: projectGroups[groupIndex].title,
+        bgColor: projectGroups[groupIndex].bgColor,
+      });
+    }
+  }, [groupIndex, projectGroups]);
 
   return (
-    <div className="mb-1 flex">
+    <div className="relative  mb-1 flex">
       {/*property*/}
       <div className="flex w-40 cursor-pointer items-center rounded py-1 px-1  hover:bg-neutral-200">
         <svg
@@ -51,42 +70,44 @@ export const TaskStatus = ({ task, updateTask }) => {
       {/*React Select*/}
       <div
         ref={inputRef}
-        className={`relative ml-2 box-border flex w-full w-full cursor-pointer flex-col items-center items-center justify-start rounded px-2  font-normal text-neutral-700 outline-none hover:bg-neutral-200 
+        className={`relative ml-2 box-border flex w-full cursor-pointer flex-col items-center items-center justify-start rounded px-2  font-normal text-neutral-700 outline-none hover:bg-neutral-200 
           
         `}
         onClick={() => setIsOptionsOpen(!isOptionsOpen)}
       >
         <div className="flex h-full w-full items-center justify-start">
           <p
-            className={` flex h-5 w-32 items-center px-2 py-0.5 text-[10px] text-white ${
+            className={` flex h-5  items-center px-2 py-0.5 text-xs font-semibold text-white ${
               status && status.bgColor
             }  relative rounded`}
           >
-            {status.title}
+            {status && status.title}
           </p>
         </div>
         {isOptionsOpen && (
-          <ul
+          <div
             tabIndex={-1}
-            className="border-neutral-150 absolute top-7 box-border w-full rounded border bg-white  py-0.5 shadow-xl"
+            className="border-neutral-150 absolute top-7 z-50 box-border w-full rounded border bg-white   shadow-lg"
           >
             {projectGroups &&
               projectGroups.map((group, index) => (
-                <li
-                  onClick={() => setStatus(group)}
+                <div
+                  onClick={() => updateStatus(index)}
                   key={index}
-                  className="rounded py-0.5 pl-2 hover:bg-neutral-200"
+                  className={`flex h-full w-full items-center justify-start ${
+                    index !== 0 ? "border-t border-neutral-100" : ""
+                  } hover:bg-neutral-200`}
                 >
                   <p
-                    className={` flex h-4 w-32 items-center px-2 text-[10px] text-white ${
+                    className={` mx-2 my-1 flex h-5 items-center px-2 py-0.5 text-xs font-semibold text-white ${
                       group && group.bgColor
-                    } rounded`}
+                    }  relative rounded`}
                   >
                     {group.title}
                   </p>
-                </li>
+                </div>
               ))}
-          </ul>
+          </div>
         )}
       </div>
     </div>

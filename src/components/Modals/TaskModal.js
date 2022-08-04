@@ -1,5 +1,5 @@
 import { useClickOutside } from "../../hooks/useClickOutside";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import ReactDOM from "react-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -7,25 +7,20 @@ import { useFirestore } from "../../hooks/firestore/useFirestore";
 import { TaskTitle } from "../../pages/Task/components/TaskTitle";
 import { TaskLabel } from "../../pages/Task/components/TaskLabel.";
 import { TaskStatus } from "../../pages/Task/components/TaskStatus";
+import { TaskPriority } from "../../pages/Task/components/TaskPriority";
 
 export const TaskModal = ({ task, taskIndex, groupIndex }) => {
-  const [priority, setPriority] = useState("");
-  const modalRef = useRef();
-  const navigate = useNavigate();
   const { projectTitle, projectGroups, projectId } = useSelector(
     (state) => state.project
   );
+
+  const modalRef = useRef();
 
   const { updateDocument: updateProject } = useFirestore("projects");
 
   const { pathname } = useLocation();
   const id = pathname.substring(0, pathname.lastIndexOf("/"));
-
-  const updatePriority = () => {
-    let newTask = structuredClone(task);
-    newTask.priority = priority;
-    updateTask(newTask);
-  };
+  const navigate = useNavigate();
 
   const updateTask = (newTask) => {
     const newGroups = structuredClone(projectGroups);
@@ -43,14 +38,8 @@ export const TaskModal = ({ task, taskIndex, groupIndex }) => {
     navigate(id, { replace: true });
   });
 
-  useEffect(() => {
-    if (task) {
-      setPriority(task.priority);
-    }
-  }, [task]);
-
   return ReactDOM.createPortal(
-    <div className="col z-999 fixed inset-0 flex flex items-center justify-center bg-black/50">
+    <div className="col fixed inset-0 z-50 flex flex cursor-text items-center justify-center bg-black/50">
       <div
         ref={modalRef}
         className="h-5/6 w-[800px] rounded bg-white text-sm font-semibold text-neutral-500"
@@ -144,30 +133,13 @@ export const TaskModal = ({ task, taskIndex, groupIndex }) => {
               </div>
             </div>
             {/*Status*/}
-            <TaskStatus task={task} updateTask={updateTask} />
+            <TaskStatus
+              task={task}
+              groupIndex={groupIndex}
+              taskIndex={taskIndex}
+            />
             {/*Priority*/}
-            <div className="mb-1 flex">
-              {/*property*/}
-              <div className="flex w-40 cursor-pointer items-center rounded py-1 px-1  hover:bg-neutral-200">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-3.5 w-3.5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <p className="ml-2 ">Priority</p>
-              </div>
-              {/*React Select*/}
-              <div className="ml-2 flex w-full cursor-pointer items-center rounded px-2 py-1 font-normal text-neutral-700 hover:bg-neutral-200">
-                {task && task.priority}
-              </div>
-            </div>
+            <TaskPriority task={task} updateTask={updateTask} />
           </div>
         </div>
         {/*text section header*/}
