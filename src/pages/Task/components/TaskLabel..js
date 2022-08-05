@@ -1,20 +1,76 @@
 import { useEffect, useRef, useState } from "react";
+import { useClickOutside } from "../../../hooks/useClickOutside";
+import { useSelector } from "react-redux";
+import { useFirestore } from "../../../hooks/firestore/useFirestore";
 
 export const TaskLabel = ({ task, updateTask }) => {
-  const [label, setLabel] = useState("");
-  const inputRef = useRef();
+  const [labels, setLabels] = useState([""]);
+  const [labelOptions, setLabelOptions] = useState([""]);
+  const [isOptionsOpen, setIsOptionsOpen] = useState(false);
 
-  const updateLabel = () => {
+  const { projectLabels, projectId } = useSelector((state) => state.project);
+
+  const inputRef = useRef();
+  const dropdownRef = useRef();
+
+  const { updateDocument: updateProject } = useFirestore("projects");
+
+  const changeLabels = (newLabel) => {
+    if (newLabel !== "") {
+      let newTask = structuredClone(task);
+      const newLabels = [...labels, newLabel];
+      newTask.labels = newLabels;
+      updateTask(newTask);
+      if (!labelOptions.includes(newLabel)) {
+        const newLabelOptions = [...labelOptions, newLabel];
+        console.log(newLabelOptions);
+        updateProject(projectId, {
+          labelOptions: newLabelOptions,
+        });
+      }
+    }
+  };
+
+  const addLabel = (newLabel) => {
     let newTask = structuredClone(task);
-    newTask.label = label;
+    if (!labels.includes(newLabel)) {
+      const newLabels = [...labels, newLabel];
+      newTask.labels = newLabels;
+      updateTask(newTask);
+    }
+  };
+  const removeLabel = (label) => {
+    let newTask = structuredClone(task);
+    const newLabels = labels.filter((l) => l !== label);
+    newTask.labels = newLabels;
     updateTask(newTask);
   };
 
+  const removeLabelOption = (label) => {
+    let newLabelOptions = labelOptions.filter((l) => l !== label);
+    updateProject(projectId, {
+      labelOptions: newLabelOptions,
+    });
+  };
+
   useEffect(() => {
-    if (task) {
-      setLabel(task.label);
+    setLabels([]);
+    if (task && task.labels) {
+      console.log(task.labels);
+      task.labels.forEach((label, index) => {
+        console.log(label, index);
+        if (label !== "") {
+          setLabels((prevState) => [...prevState, label]);
+        }
+      });
     }
+    console.log(projectLabels);
+    setLabelOptions(projectLabels);
   }, [task]);
+
+  useClickOutside(dropdownRef, () => {
+    setIsOptionsOpen(false);
+  });
 
   return (
     <div className="mb-1 flex">
@@ -35,20 +91,97 @@ export const TaskLabel = ({ task, updateTask }) => {
         <p className="ml-2 ">Label</p>
       </div>
       {/*value*/}
-
-      <input
-        ref={inputRef}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            inputRef.current.blur();
-          }
+      <div
+        className="relative ml-2 box-border flex w-full w-full cursor-pointer flex-col items-center items-center justify-start rounded
+        font-normal  text-neutral-700 outline-none hover:bg-neutral-200 "
+        onClick={() => {
+          setIsOptionsOpen(true);
+          setTimeout(() => {
+            inputRef.current.focus();
+          }, 50);
         }}
-        onBlur={updateLabel}
-        onChange={(e) => setLabel(e.target.value)}
-        value={label}
-        placeholder={task && task.label}
-        className="ml-2 flex w-full cursor-pointer items-center rounded px-2 py-1 font-normal text-neutral-700 outline-none hover:bg-neutral-200 "
-      ></input>
+      >
+        <div
+          ref={dropdownRef}
+          className="flex h-full w-full cursor-pointer items-center rounded font-semibold text-neutral-700 outline-none hover:bg-neutral-200"
+        >
+          <div className="flex items-center">
+            {/*input*/}
+            {isOptionsOpen && (
+              <p
+                ref={inputRef}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    inputRef.current.blur();
+                  }
+                }}
+                contentEditable
+                suppressContentEditableWarning={true}
+                onBlur={(e) => {
+                  changeLabels(e.target.innerText);
+                  e.target.innerText = "";
+                }}
+                className=" text- relative z-40 mx-2 my-1 flex h-5 items-center rounded bg-neutral-100 px-2
+                    py-0.5 text-xs font-semibold text-neutral-500 outline-none"
+              ></p>
+            )}
+            {labels &&
+              labels.map((label) => (
+                <p
+                  onClick={() => {
+                    removeLabel(label);
+                  }}
+                  className=" relative z-50 mx-2 my-1 flex h-5 items-center rounded bg-neutral-100 px-2
+                    py-0.5 text-xs font-semibold text-neutral-500"
+                >
+                  {label}
+                </p>
+              ))}
+          </div>
+          {isOptionsOpen && (
+            <div
+              tabIndex={-1}
+              className="border-neutral-150 absolute top-7 z-50  box-border w-full rounded border bg-white  shadow-lg"
+            >
+              {labelOptions &&
+                labelOptions.map((label) => (
+                  <div
+                    onClick={() => addLabel(label)}
+                    className=" flex h-full w-full items-center justify-start border-t border-neutral-100
+              hover:bg-neutral-200"
+                  >
+                    <p
+                      className="mx-2 my-1 flex h-5 items-center rounded bg-neutral-100 px-2
+                    py-0.5 text-xs font-semibold text-neutral-500"
+                    >
+                      {label}
+                    </p>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeLabelOption(label);
+                      }}
+                      className="ml-auto mr-2 rounded p-0.5 text-neutral-500 hover:bg-neutral-300 hover:text-neutral-600"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-3.5 w-3.5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                ))}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

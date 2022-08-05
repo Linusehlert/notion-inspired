@@ -23,7 +23,7 @@ export const AddCard = ({ index }) => {
     const newCard = {
       title: "untitled",
       id,
-      label: "undefined",
+      labels: [""],
       assignees: [{ id: userId, name: userName }],
       priority: "None",
       description: "Bubatz",

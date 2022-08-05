@@ -5,6 +5,7 @@ const initialState = {
   projectId: null,
   projectUsers: [],
   projectGroups: [],
+  projectLabels: [],
 };
 
 export const projectSlice = createSlice({
@@ -16,6 +17,7 @@ export const projectSlice = createSlice({
       state.projectId = action.payload.projectId;
       state.projectUsers = action.payload.projectUsers;
       state.projectGroups = action.payload.projectGroups;
+      state.projectLabels = action.payload.projectLabels;
     },
   },
 });

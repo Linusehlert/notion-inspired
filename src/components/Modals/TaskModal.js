@@ -1,5 +1,5 @@
 import { useClickOutside } from "../../hooks/useClickOutside";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -8,8 +8,10 @@ import { TaskTitle } from "../../pages/Task/components/TaskTitle";
 import { TaskLabel } from "../../pages/Task/components/TaskLabel.";
 import { TaskStatus } from "../../pages/Task/components/TaskStatus";
 import { TaskPriority } from "../../pages/Task/components/TaskPriority";
+import { TaskDescription } from "../../pages/Task/components/TaskDescription";
 
 export const TaskModal = ({ task, taskIndex, groupIndex }) => {
+  const [commentsOpen, setCommentsOpen] = useState(false);
   const { projectTitle, projectGroups, projectId } = useSelector(
     (state) => state.project
   );
@@ -35,11 +37,13 @@ export const TaskModal = ({ task, taskIndex, groupIndex }) => {
   };
   // close modal when click outside
   useClickOutside(modalRef, () => {
-    navigate(id, { replace: true });
+    setTimeout(() => {
+      navigate(id, { replace: true });
+    }, 10);
   });
 
   return ReactDOM.createPortal(
-    <div className="col fixed inset-0 z-50 flex flex cursor-text items-center justify-center bg-black/50">
+    <div className="col fixed inset-0 z-50 flex flex cursor-pointer items-center justify-center bg-black/50">
       <div
         ref={modalRef}
         className="h-5/6 w-[800px] rounded bg-white text-sm font-semibold text-neutral-500"
@@ -128,7 +132,7 @@ export const TaskModal = ({ task, taskIndex, groupIndex }) => {
                 <p className="ml-2 ">Assignees</p>
               </div>
               {/*value*/}
-              <div className="ml-2 flex w-full cursor-pointer items-center rounded px-2 py-1 font-normal text-neutral-700 hover:bg-neutral-200">
+              <div className="ml-2 flex w-full cursor-pointer items-center rounded px-2 py-1 font-semibold text-neutral-700 hover:bg-neutral-200">
                 {task && task.assignees && task.assignees[0].name}
               </div>
             </div>
@@ -144,17 +148,29 @@ export const TaskModal = ({ task, taskIndex, groupIndex }) => {
         </div>
         {/*text section header*/}
         <ul className="border-neutral-150 flex items-center border-b px-14 text-neutral-500">
-          <li className="mx-1 cursor-pointer pb-2 hover:border-b-2 hover:border-blue-500 hover:text-blue-500">
+          <li
+            className={`mx-1 cursor-pointer pb-2 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 
+          ${commentsOpen ? "" : "border-b-2 border-blue-500 text-blue-500"}`}
+          >
             Description
           </li>
-          <li className="ml-8 flex border-b-2 border-blue-500 pb-2 text-blue-500">
+          <li
+            className={`group ml-8 flex cursor-pointer border-b-2 pb-2 hover:border-b-2 hover:border-blue-500 hover:text-blue-500
+          ${commentsOpen ? " border-blue-500 text-blue-500" : "border-white"}`}
+          >
             Comments
             {/*comment count*/}
-            <div className="ml-2 flex items-center rounded bg-blue-500/30 px-1.5 text-xs">
+            <div
+              className={`ml-2 flex items-center rounded px-1.5 text-xs group-hover:bg-blue-100 ${
+                commentsOpen ? "bg-blue-100" : "bg-neutral-200"
+              }`}
+            >
               {task && task.comments && task.comments.length}
             </div>
           </li>
         </ul>
+        {/*text section*/}
+        <TaskDescription task={task} updateTask={updateTask} />
       </div>
     </div>,
     document.getElementById("portal")

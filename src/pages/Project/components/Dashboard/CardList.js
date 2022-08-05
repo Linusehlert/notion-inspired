@@ -19,7 +19,7 @@ export const CardList = ({ id, index }) => {
         {group &&
           group.tasks &&
           group.tasks.map((task, index) => (
-            <Card key={index} location={location} id={id} task={task} />
+            <Card key={index} location={location} index={index} task={task} />
           ))}
         {/*button to add new card*/}
         <AddCard index={index} id={id} />
