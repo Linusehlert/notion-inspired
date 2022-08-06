@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { useClickOutside } from "../../../../hooks/useClickOutside";
 import { useFirestore } from "../../../../hooks/firestore/useFirestore";
 
-export const Card = ({ task, index }) => {
+export const Card = ({ task, groupIndex }) => {
   const [color, setColor] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const { projectGroups, projectId } = useSelector((state) => state.project);
@@ -16,12 +16,14 @@ export const Card = ({ task, index }) => {
   const { updateDocument: updateProject } = useFirestore("projects");
 
   const deleteTask = () => {
+    console.log("delete task");
     const newGroups = structuredClone(projectGroups);
-    const newGroup = structuredClone(newGroups[index]);
+    const newGroup = structuredClone(newGroups[groupIndex]);
+    console.log(groupIndex);
     let newTasks = structuredClone(newGroup.tasks);
     newTasks = newTasks.filter((t) => t.id !== task.id);
     newGroup.tasks = newTasks;
-    newGroups[index] = newGroup;
+    newGroups[groupIndex] = newGroup;
     updateProject(projectId, {
       groups: newGroups,
     });
@@ -56,7 +58,7 @@ export const Card = ({ task, index }) => {
     <Link
       to={`${task.id}?view=center`}
       state={{ background: location }}
-      className="border-neutral-150 group-1 relative mb-2 flex cursor-pointer flex-col rounded-lg border bg-white
+      className="border-neutral-150 group-1 relative mb-2 flex w-60 cursor-pointer flex-col rounded-lg border bg-white
         py-2 px-3 shadow-md hover:bg-neutral-100 "
     >
       {/*Label*/}

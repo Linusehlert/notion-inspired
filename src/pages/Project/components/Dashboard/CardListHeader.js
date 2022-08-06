@@ -2,7 +2,7 @@ import { bgColors } from "../../../../assets/bgColors";
 import Modal from "../../../../components/Modals/Modal";
 import { useFirestore } from "../../../../hooks/firestore/useFirestore";
 import { useClickOutside } from "../../../../hooks/useClickOutside";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
 export const CardListHeader = ({ index }) => {
@@ -19,7 +19,6 @@ export const CardListHeader = ({ index }) => {
   const { projectGroups, projectId } = useSelector((state) => state.project);
   const { updateDocument: updateProject } = useFirestore("projects");
 
-  console.log(group.title);
   //open Input for editing title
   const editTitle = () => {
     setNewTitle(group && group.title);
@@ -68,6 +67,13 @@ export const CardListHeader = ({ index }) => {
     });
     setDIsOpen(false);
   };
+
+  useEffect(() => {
+    if (group.title === "untitled") {
+      editTitle();
+    }
+  }, [group.title]);
+
   return (
     <div
       ref={headerRef}

@@ -25,7 +25,12 @@ export const ProjectTitle = () => {
   };
 
   useEffect(() => {
-    if (projectTitle) setTitle(projectTitle);
+    if (projectTitle) {
+      setTitle(projectTitle);
+    }
+    setTimeout(() => {
+      if (projectTitle === "untitled") inputRef.current.focus();
+    }, 100);
   }, [projectTitle]);
 
   return (

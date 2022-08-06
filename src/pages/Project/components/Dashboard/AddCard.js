@@ -40,7 +40,7 @@ export const AddCard = ({ index }) => {
   return (
     <button
       onClick={addTask}
-      className="flex cursor-pointer items-center justify-center rounded border border-dashed border-neutral-300 py-1
+      className="flex w-60 cursor-pointer items-center justify-center rounded border border-dashed border-neutral-300 py-1
                 text-neutral-600 hover:bg-neutral-200 hover:text-neutral-700"
     >
       <svg

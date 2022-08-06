@@ -43,7 +43,7 @@ export const TaskModal = ({ task, taskIndex, groupIndex }) => {
   });
 
   return ReactDOM.createPortal(
-    <div className="col fixed inset-0 z-50 flex flex cursor-pointer items-center justify-center bg-black/50">
+    <div className="col fixed inset-0 z-50 flex flex cursor-text items-center justify-center bg-black/50">
       <div
         ref={modalRef}
         className="h-5/6 w-[800px] rounded bg-white text-sm font-semibold text-neutral-500"
@@ -72,7 +72,7 @@ export const TaskModal = ({ task, taskIndex, groupIndex }) => {
             <p className="font-normal">
               {projectTitle} /{" "}
               <span className="font-semibold text-neutral-700">
-                {task && task.label}
+                {task && task.title}
               </span>
             </p>
             {/*options*/}

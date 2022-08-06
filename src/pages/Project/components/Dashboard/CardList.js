@@ -6,23 +6,30 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 import { AddCard } from "./AddCard";
 
-export const CardList = ({ id, index }) => {
-  const group = useSelector((state) => state.project.projectGroups[index]);
+export const CardList = ({ id, groupIndex }) => {
+  const group = useSelector((state) => state.project.projectGroups[groupIndex]);
   const location = useLocation();
 
   return (
     <div className="group mr-3 flex w-60 flex-col ">
       {/*group header*/}
-      <CardListHeader index={index} id={id} />
-      <div className="flex w-60 flex-col overflow-y-auto">
+      <CardListHeader index={groupIndex} id={id} />
+      <div className="flex h-[calc(100vh-217px)] w-[250px]  overflow-y-scroll rounded scrollbar-thin scrollbar-track-white scrollbar-thumb-neutral-200">
         {/*card list*/}
-        {group &&
-          group.tasks &&
-          group.tasks.map((task, index) => (
-            <Card key={index} location={location} index={index} task={task} />
-          ))}
         {/*button to add new card*/}
-        <AddCard index={index} id={id} />
+        <div className="flex w-full flex-col">
+          {group &&
+            group.tasks &&
+            group.tasks.map((task, index) => (
+              <Card
+                key={index}
+                location={location}
+                groupIndex={groupIndex}
+                task={task}
+              />
+            ))}
+          <AddCard index={groupIndex} id={id} />
+        </div>
       </div>
     </div>
   );
