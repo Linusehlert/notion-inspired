@@ -18,10 +18,24 @@ export default function Login() {
     login(email, password);
   };
 
+  const demoLogin = (e) => {
+    e.preventDefault();
+    login("demo@demo.de", "DemoDemo");
+  };
+
   return (
     <div className="flex h-screen flex-col items-center justify-center">
       <div className="w-[350px]">
         <h2 className="mb-8 text-center text-5xl font-bold">Log In</h2>
+        {/*Demo Account*/}
+
+        <button
+          onClick={demoLogin}
+          disabled={isPending}
+          className="border-light focus:bg-gray mt-3  w-[350px] rounded border py-1.5 font-semibold"
+        >
+          Login with Demo Account
+        </button>
         {/*Google Auth*/}
         <div className="border-line flex justify-center border-b">
           <button

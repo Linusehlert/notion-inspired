@@ -1,4 +1,4 @@
-import { TaskModal } from "../../components/Modals/TaskModal";
+import { TaskModal } from "./views/TaskModal";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 

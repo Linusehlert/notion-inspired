@@ -63,7 +63,15 @@ export const Card = ({ task, groupIndex }) => {
     >
       {/*Label*/}
       <h5 className="flex items-center font-normal text-neutral-400">
-        {task && task.label}
+        {task &&
+          task.labels &&
+          task.labels
+            .slice(0, 4)
+            .map((label, index) => (
+              <span key={label}>
+                {`${index === 0 ? "" : "/"}${index !== 3 ? label : "..."}`}{" "}
+              </span>
+            ))}
       </h5>
       {/*Title*/}
       <h3 className="mb-2 text-base font-bold text-neutral-700">

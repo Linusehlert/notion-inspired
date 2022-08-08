@@ -24,16 +24,16 @@ export const ProjectBlock = ({ project }) => {
         key={project.id}
         className={({ isActive }) =>
           isActive
-            ? `relative group flex items-center px-2 py-1 rounded font-semibold ` +
-              `bg-blue-500 text-white cursor-pointer `
-            : `relative group flex items-center px-2 py-1 rounded font-semibold text-neutral-500 hover:bg-neutral-200 hover:text-neutral-700`
+            ? `group relative flex items-center rounded px-2 py-1 font-semibold ` +
+              `cursor-pointer bg-blue-500 text-white `
+            : `group relative flex items-center rounded px-2 py-1 font-semibold text-neutral-500 hover:bg-neutral-200 hover:text-neutral-700`
         }
       >
         <p className="ml-2">{project.title}</p>
         {/*options*/}
         <button
           onClick={handleOptions}
-          className="absolute z-99 right-2 p-1 rounded hidden group-hover:block hover:hover:bg-white/40"
+          className="z-99 absolute right-2 hidden rounded p-1 hover:hover:bg-white/40 group-hover:block"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -43,8 +43,7 @@ export const ProjectBlock = ({ project }) => {
           >
             <path
               fillRule="evenodd"
-              d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm1 8a1 1 0 100 2h6a1 1 0 100-2H7z"
-              clipRule="evenodd"
+              d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V8a2 2 0 00-2-2h-5L9 4H4zm4 6a1 1 0 100 2h4a1 1 0 100-2H8z"
             />
           </svg>
         </button>
