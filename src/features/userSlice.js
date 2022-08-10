@@ -5,6 +5,7 @@ const initialState = {
   userEmail: null,
   userPhoto: null,
   userId: null,
+  lastUrl: null,
 };
 
 export const userSlice = createSlice({
@@ -17,6 +18,9 @@ export const userSlice = createSlice({
       state.userPhoto = action.payload.userPhoto;
       state.userId = action.payload.userId;
     },
+    setUserLastUrl: (state, action) => {
+      state.lastUrl = action.payload.lastUrl;
+    },
     setUserLogOut: (state) => {
       state.userName = null;
       state.userEmail = null;
@@ -26,5 +30,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setActiveUser, setUserLogOut } = userSlice.actions;
+export const { setActiveUser, setUserLogOut, setUserLastUrl } =
+  userSlice.actions;
 export default userSlice.reducer;

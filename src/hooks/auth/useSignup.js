@@ -10,6 +10,7 @@ import {
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export const useSignup = () => {
   const [error, setError] = useState(null);
@@ -28,19 +29,19 @@ export const useSignup = () => {
             // create user document in firestore
             const docRef = doc(db, "users", user.uid);
             setDoc(docRef, {
-              online: true,
               displayName: user.displayName,
               email: user.email,
-              photoUrl: null,
+              photoUrl: user.photoURL,
+              lastUrl: "/",
             })
               .then(() => {
-                // dispatch login action
                 dispatch(
                   setActiveUser({
                     userName: user.displayName,
                     userEmail: user.email,
-                    userPhoto: null,
+                    userPhoto: user.photoURL,
                     userId: user.uid,
+                    lastUrl: "/",
                   })
                 );
                 setIsPending(false);
@@ -73,28 +74,24 @@ export const useSignup = () => {
         getDoc(docRef)
           .then((docSnap) => {
             if (docSnap.exists()) {
-              updateDoc(docRef, { online: true })
-                .then(() => {
-                  dispatch(
-                    setActiveUser({
-                      userName: user.displayName,
-                      userEmail: user.email,
-                      userPhoto: user.photoURL,
-                      userId: user.uid,
-                    })
-                  );
-                  setIsPending(false);
+              const { displayName, email, photoUrl, lastUrl } = docSnap.data();
+              console.log(lastUrl);
+              dispatch(
+                setActiveUser({
+                  userName: displayName,
+                  userEmail: email,
+                  userPhoto: photoUrl,
+                  userId: user.uid,
+                  lastUrl: lastUrl,
                 })
-                .catch((err) => {
-                  setError(err.message + " Could not update user");
-                  setIsPending(false);
-                });
+              );
+              setIsPending(false);
             } else {
               setDoc(docRef, {
-                online: true,
                 displayName: user.displayName,
                 email: user.email,
                 photoUrl: user.photoURL,
+                lastUrl: "/",
               })
                 .then(() => {
                   dispatch(
@@ -103,6 +100,7 @@ export const useSignup = () => {
                       userEmail: user.email,
                       userPhoto: user.photoURL,
                       userId: user.uid,
+                      lastUrl: "/",
                     })
                   );
                   setIsPending(false);

@@ -46,7 +46,9 @@ const firestoreReducer = (state, action) => {
 
 export const useFirestore = (col) => {
   const [response, dispatch] = useReducer(firestoreReducer, initialState);
-  const { userId, userName } = useSelector((state) => state.user);
+  const { userId, userName, userEmail, userPhoto } = useSelector(
+    (state) => state.user
+  );
   const navigate = useNavigate();
 
   // add a project
@@ -59,6 +61,16 @@ export const useFirestore = (col) => {
       title: "untitled",
       createdAt: serverTimestamp(),
       users: [userId],
+      admins: [
+        {
+          id: userId,
+          displayName: userName,
+          email: userEmail,
+          photoUrl: userPhoto,
+        },
+      ],
+      managers: [],
+      developers: [],
       groups: [{ bgColor: randomBgColor, title: "No Status", tasks: [] }],
     })
       .then((addedDocument) => {
@@ -70,29 +82,6 @@ export const useFirestore = (col) => {
         console.log(err.message);
       });
   };
-
-  //add a card to a project
-  // const addCard = async (status) => {
-  //   dispatch({ type: "IS_PENDING" });
-  //   const colRef = collection(db, col);
-  //   addDoc(colRef, {
-  //     title: "untitled",
-  //     label: "",
-  //     assignees: [{ id: userId, name: userName }],
-  //     status,
-  //     priority: 0,
-  //     description: "",
-  //     comments: [],
-  //   })
-  //     .then((addedDocument) => {
-  //       dispatch({ type: "SUCCESS", payload: addedDocument });
-  //       return addedDocument;
-  //     })
-  //     .catch((err) => {
-  //       dispatch({ type: "ERROR", payload: err.message });
-  //       console.log(err.message);
-  //     });
-  // };
 
   // update a document
   const updateDocument = async (id, obj) => {

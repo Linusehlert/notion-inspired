@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../../../firebase/config";
 import { useSelector } from "react-redux";
-import Modal from "../../../../components/Modals/Modal";
 import { useClickOutside } from "../../../../hooks/useClickOutside";
+import Modal from "../../../../components/Modals/Modal";
 
 export const TeamMembers = () => {
   const [users, setUsers] = useState([]);
@@ -11,19 +9,19 @@ export const TeamMembers = () => {
 
   const modalRef = useRef();
 
-  const { projectUsers, projectTitle } = useSelector((state) => state.project);
+  const { projectAdmins, projectManagers, projectDevelopers, projectTitle } =
+    useSelector((state) => state.project);
+
   useEffect(() => {
-    const getUserDocuments = () => {
-      setUsers([]);
-      projectUsers.forEach(async (userId) => {
-        const docRef = doc(db, "users", userId);
-        const docSnap = await getDoc(docRef);
-        const user = docSnap.data();
-        setUsers((prevState) => [...prevState, user]);
-      });
-    };
-    getUserDocuments();
-  }, [projectUsers]);
+    setUsers([]);
+    const newUsers = [
+      ...projectAdmins,
+      ...projectManagers,
+      ...projectDevelopers,
+    ];
+    console.log(newUsers);
+    setUsers(newUsers);
+  }, [projectAdmins, projectManagers, projectDevelopers]);
 
   useClickOutside(modalRef, () => {
     setOpen(false);
@@ -31,26 +29,41 @@ export const TeamMembers = () => {
   return (
     <div className="border-neutral-150 flex border-r pr-4 ">
       <div className={` relative flex h-8  w-[96px] `}>
-        {users[0] && (
+        {users[0] && users[0].photoUrl && (
           <img
             src={users[0].photoUrl}
             className="absolute z-[1] h-8 w-8 cursor-default rounded-full border-2 border-white"
-            alt="user"
+            alt={users[0] && users[0].displayName[0]}
           />
         )}
-        {users[1] && (
+        {users[0] && !users[0].photoUrl && (
+          <div className="absolute z-[1] flex h-8 w-8 cursor-default items-center justify-center rounded-full border-2 border-white bg-blue-500 text-white">
+            {users[0] && users[0].displayName[0]}
+          </div>
+        )}
+        {users[1] && users[1].photoUrl && (
           <img
             src={users[1].photoUrl}
-            className="absolute left-[20px] z-[2] h-8 w-8 cursor-default rounded-full border-2 border-white"
-            alt="user"
+            className="absolute z-[1] h-8 w-8 cursor-default rounded-full border-2 border-white"
+            alt={users[1] && users[1].displayName[0]}
           />
         )}
-        {users[2] && (
+        {users[1] && !users[1].photoUrl && (
+          <div className="absolute z-[1] flex h-8 w-8 cursor-default items-center justify-center rounded-full border-2 border-white bg-blue-500 text-white">
+            {users[1] && users[1].displayName[0]}
+          </div>
+        )}
+        {users[2] && users[2].photoUrl && (
           <img
             src={users[2].photoUrl}
-            className="absolute left-[40px] z-[3] h-8 w-8 cursor-default rounded-full border-2 border-white"
-            alt="user"
+            className="absolute z-[1] h-8 w-8 cursor-default rounded-full border-2 border-white"
+            alt={users[2] && users[2].displayName[0]}
           />
+        )}
+        {users[2] && !users[2].photoUrl && (
+          <div className="absolute z-[1] flex h-8 w-8 cursor-default items-center justify-center rounded-full border-2 border-white bg-blue-500 text-white">
+            {users[2] && users[2].displayName[0]}
+          </div>
         )}
         {users[3] && (
           <div className="absolute left-[60px] z-[4] flex h-8 w-8 cursor-default items-center justify-center rounded-full border-2 border-white bg-neutral-200 text-sm leading-none">
@@ -110,23 +123,36 @@ export const TeamMembers = () => {
                     Invite
                   </button>
                 </div>
-                <div className="mb-1 flex items-center">
-                  <div className="h-8 w-8 rounded bg-neutral-200" />
-                  <div className="ml-2">
-                    <h3 className="text-neutral-700">Admin1</h3>
-                    <h4 className="text-xs font-normal">Admin@Admin.de</h4>
+                {projectAdmins.map((admin) => (
+                  <div className="mb-1 flex items-center">
+                    {admin.photoUrl && (
+                      <img
+                        src={admin.photoUrl}
+                        className="mr-2 h-8 w-8 cursor-default rounded-full border-2 border-white"
+                        alt={admin.displayName[0]}
+                      />
+                    )}
+                    {!admin.photoUrl && (
+                      <div className="h-8 w-8 rounded bg-neutral-200">
+                        {admin.displayName[0]}
+                      </div>
+                    )}
+                    <div className="ml-2">
+                      <h3 className="text-neutral-700">{admin.displayName}</h3>
+                      <h4 className="text-xs font-normal">{admin.email}</h4>
+                    </div>
+                    <button className="ml-auto rounded p-0.5 hover:bg-neutral-200">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-3.5 w-3.5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+                      </svg>
+                    </button>
                   </div>
-                  <button className="ml-auto rounded p-0.5 hover:bg-neutral-200">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-3.5 w-3.5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
-                    </svg>
-                  </button>
-                </div>
+                ))}
               </div>
               {/*Managers*/}
               <div className="w-52 ">
@@ -148,6 +174,38 @@ export const TeamMembers = () => {
                     Invite
                   </button>
                 </div>
+                {projectManagers.map((manager) => (
+                  <div className="mb-1 flex items-center">
+                    {manager.photoUrl && (
+                      <img
+                        src={manager.photoUrl}
+                        className="mr-2 h-8 w-8 cursor-default rounded-full border-2 border-white"
+                        alt={manager.displayName[0]}
+                      />
+                    )}
+                    {!manager.photoUrl && (
+                      <div className="h-8 w-8 rounded bg-neutral-200">
+                        {manager.displayName[0]}
+                      </div>
+                    )}
+                    <div className="ml-2">
+                      <h3 className="text-neutral-700">
+                        {manager.displayName}
+                      </h3>
+                      <h4 className="text-xs font-normal">{manager.email}</h4>
+                    </div>
+                    <button className="ml-auto rounded p-0.5 hover:bg-neutral-200">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-3.5 w-3.5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+                      </svg>
+                    </button>
+                  </div>
+                ))}
               </div>
               {/*Developers*/}
               <div className="w-52 ">
@@ -169,6 +227,38 @@ export const TeamMembers = () => {
                     Invite
                   </button>
                 </div>
+                {projectDevelopers.map((developer) => (
+                  <div className="mb-1 flex items-center">
+                    {developer.photoUrl && (
+                      <img
+                        src={developer.photoUrl}
+                        className="mr-2 h-8 w-8 cursor-default rounded-full border-2 border-white"
+                        alt={developer.displayName[0]}
+                      />
+                    )}
+                    {!developer.photoUrl && (
+                      <div className="h-8 w-8 rounded bg-neutral-200">
+                        {developer.displayName[0]}
+                      </div>
+                    )}
+                    <div className="ml-2">
+                      <h3 className="text-neutral-700">
+                        {developer.displayName}
+                      </h3>
+                      <h4 className="text-xs font-normal">{developer.email}</h4>
+                    </div>
+                    <button className="ml-auto rounded p-0.5 hover:bg-neutral-200">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-3.5 w-3.5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+                      </svg>
+                    </button>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

@@ -14,11 +14,23 @@ export const useDocument = (col, id) => {
     const docRef = doc(db, col, id);
     const unsub = onSnapshot(docRef, (snapshot) => {
       if (snapshot.data()) {
-        const { title, users, groups, labelOptions } = snapshot.data();
+        const {
+          title,
+          users,
+          admins,
+          managers,
+          developers,
+          groups,
+          labelOptions,
+        } = snapshot.data();
+
         dispatch(
           setProject({
             projectTitle: title,
             projectUsers: users,
+            projectAdmins: admins,
+            projectManagers: managers,
+            projectDevelopers: developers,
             projectGroups: groups,
             projectId: id,
             projectLabels: labelOptions,
