@@ -9,7 +9,6 @@ export const ProfileSection = () => {
   const [pIsOpen, setPIsOpen] = useState(false);
   const profileRef = useRef();
   //auth
-  const { logout, isPending } = useLogout();
   const { userName } = useSelector((state) => state.user);
 
   //close modal when click outside
@@ -46,7 +45,7 @@ export const ProfileSection = () => {
           </svg>
         </div>
         {/*Profile Options Popup*/}
-        <OptionsPopup isOpen={pIsOpen} logout={logout} isPending={isPending} />
+        <OptionsPopup isOpen={pIsOpen} />
       </div>
 
       {/*Search*/}

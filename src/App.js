@@ -14,7 +14,9 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { AcceptInvite } from "./pages/AcceptInvite";
+import { setInviteLink } from "./features/inviteSlice";
 
 function App() {
   const [authReady, setAuthReady] = useState(false);
@@ -25,25 +27,32 @@ function App() {
   //redux
   const dispatch = useDispatch();
   const { userName, userId, lastUrl } = useSelector((state) => state.user);
+  const { inviteLink } = useSelector((state) => state.invite);
 
   // check at page load if a user is authenticated
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
         // user is logged in, send the user's details to redux, store the current user in the state
-        dispatch(
-          setActiveUser({
-            userName: user.displayName,
-            userEmail: user.email,
-            userPhoto: user.photoURL,
-            userId: user.uid,
-            lastUrl: location.pathname,
-          })
-        );
+        const docRef = doc(db, "users", user.uid);
+        getDoc(docRef).then((doc) => {
+          const { displayName, email, photoUrl, lastUrl } = doc.data();
+          dispatch(
+            setActiveUser({
+              userName: displayName,
+              userEmail: email,
+              userPhoto: photoUrl,
+              userId: user.uid,
+              lastUrl: inviteLink ? inviteLink : lastUrl,
+            })
+          );
+          dispatch(setInviteLink(null));
+          setAuthReady(true);
+        });
       } else {
         dispatch(setUserLogOut());
+        setAuthReady(true);
       }
-      setAuthReady(true);
       unsub();
     });
   });
@@ -51,6 +60,7 @@ function App() {
   useEffect(() => {
     if (userId) {
       if (location.pathname !== "/login" && location.pathname !== "/signup") {
+        setInviteLink(null);
         updateDoc(doc(db, "users", userId), {
           lastUrl: location.pathname,
         }).then(() => {
@@ -59,6 +69,14 @@ function App() {
       }
     }
   }, [location, userId, dispatch]);
+
+  useEffect(() => {
+    if (location.pathname.includes("invite")) {
+      dispatch(setInviteLink(location.pathname));
+    }
+  }, [location, dispatch]);
+
+  console.log(inviteLink, lastUrl);
 
   return (
     <>
@@ -71,15 +89,16 @@ function App() {
             <Route path=":id" element={<Project />}>
               <Route path=":id" element={<Task />} />
             </Route>
-            {/*<Route path="id" element={<Task />} />*/}
           </Route>
+          <Route path="invite/:id" element={<AcceptInvite />} />
+
           <Route
             path="/login"
-            element={!userName ? <Login /> : <Navigate to={lastUrl} replace />}
+            element={!lastUrl ? <Login /> : <Navigate to={lastUrl} replace />}
           />
           <Route
             path="/signup"
-            element={!userName ? <SignUp /> : <Navigate to={lastUrl} replace />}
+            element={!lastUrl ? <SignUp /> : <Navigate to={lastUrl} replace />}
           />
         </Routes>
       )}

@@ -3,12 +3,13 @@ import { auth, db } from "../../firebase/config";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export const useLogin = () => {
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const dispatch = useDispatch();
+  const { inviteLink } = useSelector((state) => state.invite);
 
   const login = (email, password) => {
     setError(null);
@@ -30,7 +31,7 @@ export const useLogin = () => {
                     userEmail: email,
                     userPhoto: photoUrl,
                     userId: user.uid,
-                    lastUrl: lastUrl,
+                    lastUrl: inviteLink ? inviteLink : lastUrl,
                   })
                 );
               })

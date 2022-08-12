@@ -1,6 +1,7 @@
 import { useLogin } from "../../hooks/auth/useLogin";
 import { useSignup } from "../../hooks/auth/useSignup";
 import { useState } from "react";
+import { ClimbingBoxLoader, HashLoader } from "react-spinners";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -22,6 +23,14 @@ export default function Login() {
     e.preventDefault();
     login("demo@demo.de", "DemoDemo");
   };
+
+  if (isPending || Pending) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <HashLoader color="#3b82f6" loading={true} />
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen flex-col items-center justify-center">

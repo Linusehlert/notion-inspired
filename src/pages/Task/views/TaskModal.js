@@ -44,10 +44,10 @@ export const TaskModal = ({ task, taskIndex, groupIndex }) => {
   });
 
   return ReactDOM.createPortal(
-    <div className="col fixed inset-0 z-30 flex flex cursor-text items-center justify-center bg-black/50">
+    <div className="col fixed inset-0 z-30 flex flex cursor-pointer items-center justify-center bg-black/50">
       <div
         ref={modalRef}
-        className="relative z-50 h-5/6 w-[800px] rounded bg-white text-sm font-semibold text-neutral-500"
+        className="relative z-50 h-5/6 w-[800px] cursor-text rounded bg-white text-sm font-semibold text-neutral-500"
       >
         {/*top section*/}
         <div className="px-12 py-4">

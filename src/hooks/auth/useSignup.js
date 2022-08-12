@@ -7,15 +7,15 @@ import {
   signInWithPopup,
   updateProfile,
 } from "firebase/auth";
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 export const useSignup = () => {
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const dispatch = useDispatch();
+  const { inviteLink } = useSelector((state) => state.invite);
 
   const signup = (email, password, displayName) => {
     setError(null);
@@ -32,7 +32,7 @@ export const useSignup = () => {
               displayName: user.displayName,
               email: user.email,
               photoUrl: user.photoURL,
-              lastUrl: "/",
+              lastUrl: inviteLink ? inviteLink : "/",
             })
               .then(() => {
                 dispatch(
@@ -41,7 +41,7 @@ export const useSignup = () => {
                     userEmail: user.email,
                     userPhoto: user.photoURL,
                     userId: user.uid,
-                    lastUrl: "/",
+                    lastUrl: inviteLink ? inviteLink : "/",
                   })
                 );
                 setIsPending(false);
@@ -82,7 +82,7 @@ export const useSignup = () => {
                   userEmail: email,
                   userPhoto: photoUrl,
                   userId: user.uid,
-                  lastUrl: lastUrl,
+                  lastUrl: inviteLink ? inviteLink : lastUrl,
                 })
               );
               setIsPending(false);
@@ -91,7 +91,7 @@ export const useSignup = () => {
                 displayName: user.displayName,
                 email: user.email,
                 photoUrl: user.photoURL,
-                lastUrl: "/",
+                lastUrl: inviteLink ? inviteLink : "/",
               })
                 .then(() => {
                   dispatch(
@@ -100,7 +100,7 @@ export const useSignup = () => {
                       userEmail: user.email,
                       userPhoto: user.photoURL,
                       userId: user.uid,
-                      lastUrl: "/",
+                      lastUrl: inviteLink ? inviteLink : "/",
                     })
                   );
                   setIsPending(false);

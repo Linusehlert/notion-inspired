@@ -1,6 +1,9 @@
 import { Transition } from "@headlessui/react";
+import { useLogout } from "../../../hooks/auth/useLogout";
 
-export const OptionsPopup = ({ isOpen, logout, isPending }) => {
+export const OptionsPopup = ({ isOpen }) => {
+  const { logout, isPending } = useLogout();
+
   return (
     <Transition
       show={isOpen}
@@ -12,14 +15,15 @@ export const OptionsPopup = ({ isOpen, logout, isPending }) => {
       leaveTo="opacity-0"
     >
       <div
-        className="flex flex-col items-start bg-neutral-50 p-1 fixed top-16 left-2 z-100 w-60
-                        text-sm text-neutral-600 border border-neutral-150 rounded shadow-lg
+        className="z-100 border-neutral-150 fixed top-16 left-2 flex w-60 flex-col items-start rounded
+                        border bg-neutral-50 p-1 text-sm text-neutral-600 shadow-lg
                         transition "
       >
-        <button className="flex items-center px-2 py-1 w-full text-start rounded hover:bg-neutral-200">
+        {/*TODO edit Profile*/}
+        <button className="flex w-full items-center rounded px-2 py-1 text-start hover:bg-neutral-200">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-3 w-3 mr-2"
+            className="mr-2 h-3 w-3"
             viewBox="0 0 20 20"
             fill="currentColor"
           >
@@ -32,14 +36,15 @@ export const OptionsPopup = ({ isOpen, logout, isPending }) => {
           </svg>
           Edit Profile
         </button>
+        {/*User LogOut*/}
         <button
           onClick={logout}
           disabled={isPending}
-          className="flex items-center px-2 py-1 w-full text-start rounded hover:bg-neutral-200"
+          className="flex w-full items-center rounded px-2 py-1 text-start hover:bg-neutral-200"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-3 w-3 mr-2"
+            className="mr-2 h-3 w-3"
             viewBox="0 0 20 20"
             fill="currentColor"
           >

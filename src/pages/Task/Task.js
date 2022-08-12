@@ -21,6 +21,7 @@ export const Task = () => {
       }
     });
   });
+
   if (view == "center")
     return (
       <TaskModal task={task} groupIndex={groupIndex} taskIndex={taskIndex} />

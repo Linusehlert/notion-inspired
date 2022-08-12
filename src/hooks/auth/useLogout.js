@@ -4,6 +4,7 @@ import { signOut } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export const useLogout = () => {
   const [error, setError] = useState(null);
@@ -17,20 +18,8 @@ export const useLogout = () => {
     //sign user out
     signOut(auth)
       .then(() => {
-        //update online status to false
-        const docRef = doc(db, "users", userId);
-        updateDoc(docRef, {
-          online: false,
-        })
-          .then(() => {
-            // dispatch logout action
-            dispatch(setUserLogOut());
-            setIsPending(false);
-          })
-          .catch((err) => {
-            setError(err.message + " Could not update user");
-            setIsPending(false);
-          });
+        console.log("logged out");
+        dispatch(setUserLogOut());
       })
       .catch((err) => {
         setError(err.message + " Could not sign out");

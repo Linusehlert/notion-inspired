@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { useDocument } from "../../../../hooks/firestore/useDocument";
 import { useSelector } from "react-redux";
 import { useFirestore } from "../../../../hooks/firestore/useFirestore";
 
@@ -12,7 +11,6 @@ export const ProjectTitle = () => {
       ? pathname.substring(1, pathname.lastIndexOf("/"))
       : pathname;
 
-  useDocument("projects", id);
   const inputRef = useRef();
   const { projectTitle } = useSelector((state) => state.project);
   const { updateDocument: updateProject } = useFirestore("projects");

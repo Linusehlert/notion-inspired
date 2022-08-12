@@ -17,6 +17,7 @@ export const userSlice = createSlice({
       state.userEmail = action.payload.userEmail;
       state.userPhoto = action.payload.userPhoto;
       state.userId = action.payload.userId;
+      state.lastUrl = action.payload.lastUrl;
     },
     setUserLastUrl: (state, action) => {
       state.lastUrl = action.payload.lastUrl;
@@ -26,6 +27,7 @@ export const userSlice = createSlice({
       state.userEmail = null;
       state.userPhoto = null;
       state.userId = null;
+      state.lastUrl = null;
     },
   },
 });
