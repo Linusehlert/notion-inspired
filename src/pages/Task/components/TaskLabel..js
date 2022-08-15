@@ -18,8 +18,7 @@ export const TaskLabel = ({ task, updateTask }) => {
   const changeLabels = (newLabel) => {
     if (newLabel !== "") {
       let newTask = structuredClone(task);
-      const newLabels = [...labels, newLabel];
-      newTask.labels = newLabels;
+      newTask.labels = [...labels, newLabel];
       updateTask(newTask);
       if (!labelOptions.includes(newLabel)) {
         const newLabelOptions = [...labelOptions, newLabel];
@@ -32,17 +31,15 @@ export const TaskLabel = ({ task, updateTask }) => {
   };
 
   const addLabel = (newLabel) => {
-    let newTask = structuredClone(task);
     if (!labels.includes(newLabel)) {
-      const newLabels = [...labels, newLabel];
-      newTask.labels = newLabels;
+      let newTask = structuredClone(task);
+      newTask.labels = [...labels, newLabel];
       updateTask(newTask);
     }
   };
   const removeLabel = (label) => {
     let newTask = structuredClone(task);
-    const newLabels = labels.filter((l) => l !== label);
-    newTask.labels = newLabels;
+    newTask.labels = labels.filter((l) => l !== label);
     updateTask(newTask);
   };
 
@@ -56,7 +53,6 @@ export const TaskLabel = ({ task, updateTask }) => {
   useEffect(() => {
     setLabels([]);
     if (task && task.labels) {
-      console.log(task.labels);
       task.labels.forEach((label, index) => {
         console.log(label, index);
         if (label !== "") {
@@ -64,7 +60,6 @@ export const TaskLabel = ({ task, updateTask }) => {
         }
       });
     }
-    console.log(projectLabels);
     setLabelOptions(projectLabels);
   }, [task]);
 
@@ -95,89 +90,97 @@ export const TaskLabel = ({ task, updateTask }) => {
         className="relative ml-2 box-border flex w-full w-full cursor-pointer flex-col items-center items-center justify-start rounded
         font-normal  text-neutral-700 outline-none hover:bg-neutral-200 "
         onClick={() => {
-          setIsOptionsOpen(true);
-          setTimeout(() => {
-            inputRef.current.focus();
-          }, 50);
+          setIsOptionsOpen(!isOptionsOpen);
+          if (!isOptionsOpen) {
+            setTimeout(() => {
+              inputRef.current.focus();
+            }, 50);
+          }
         }}
       >
         <div
           ref={dropdownRef}
-          className="flex h-full w-full cursor-pointer items-center rounded font-semibold text-neutral-700 outline-none hover:bg-neutral-200"
+          className="group-1 flex h-full w-full cursor-pointer items-center  rounded font-semibold text-neutral-700 outline-none hover:bg-neutral-200"
         >
           <div className="flex items-center">
             {/*input*/}
             {isOptionsOpen && (
               <p
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
                 ref={inputRef}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
+                    changeLabels(e.target.innerText);
+                    e.target.innerText = "";
                     inputRef.current.blur();
                   }
                 }}
                 contentEditable
                 suppressContentEditableWarning={true}
-                onBlur={(e) => {
-                  changeLabels(e.target.innerText);
-                  e.target.innerText = "";
-                }}
-                className=" text- relative z-40 mx-2 my-1 flex h-5 items-center rounded bg-neutral-100 px-2
-                    py-0.5 text-xs font-semibold text-neutral-500 outline-none"
+                className=" text- relative z-40 mx-2 my-1 flex h-5 items-center rounded bg-neutral-200 px-2 py-0.5
+                    text-xs font-semibold text-neutral-600 outline-none group-1-hover:bg-neutral-300 "
               ></p>
             )}
             {labels &&
               labels.map((label) => (
                 <p
-                  onClick={() => {
-                    removeLabel(label);
+                  onClick={(e) => {
+                    if (isOptionsOpen) {
+                      e.stopPropagation();
+                      removeLabel(label);
+                    }
                   }}
-                  className=" relative z-50 mx-2 my-1 flex h-5 items-center rounded bg-neutral-100 px-2
-                    py-0.5 text-xs font-semibold text-neutral-500"
+                  className="relative z-50 mx-2 my-1 flex h-5 items-center rounded bg-neutral-200 px-2 py-0.5
+                    text-xs font-semibold text-neutral-600 group-1-hover:bg-neutral-300 group-1-hover:text-neutral-700"
                 >
                   {label}
                 </p>
               ))}
           </div>
-          {isOptionsOpen && (
+          {isOptionsOpen && labelOptions.length > 0 && (
             <div
               tabIndex={-1}
               className="border-neutral-150 absolute top-7 z-50  box-border w-full rounded border bg-white  shadow-lg"
             >
-              {labelOptions &&
-                labelOptions.map((label) => (
-                  <div
-                    onClick={() => addLabel(label)}
-                    className=" flex h-full w-full items-center justify-start border-t border-neutral-100
+              {labelOptions.map((label) => (
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    addLabel(label);
+                  }}
+                  className=" group flex h-full w-full items-center justify-start border-t border-neutral-100
               hover:bg-neutral-200"
+                >
+                  <p
+                    className="mx-2 my-1 flex h-5 items-center rounded bg-neutral-200 px-2 py-0.5
+                    text-xs font-semibold text-neutral-600 group-hover:bg-neutral-300"
                   >
-                    <p
-                      className="mx-2 my-1 flex h-5 items-center rounded bg-neutral-100 px-2
-                    py-0.5 text-xs font-semibold text-neutral-500"
+                    {label}
+                  </p>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeLabelOption(label);
+                    }}
+                    className="ml-auto mr-2 rounded p-0.5 text-neutral-500 hover:bg-neutral-300 "
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-3.5 w-3.5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
                     >
-                      {label}
-                    </p>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        removeLabelOption(label);
-                      }}
-                      className="ml-auto mr-2 rounded p-0.5 text-neutral-500 hover:bg-neutral-300 hover:text-neutral-600"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-3.5 w-3.5"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                ))}
+                      <path
+                        fillRule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              ))}
             </div>
           )}
         </div>

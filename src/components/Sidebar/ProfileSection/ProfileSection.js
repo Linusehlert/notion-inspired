@@ -1,4 +1,3 @@
-import { useLogout } from "../../../hooks/auth/useLogout";
 import { useClickOutside } from "../../../hooks/useClickOutside";
 import { OptionsPopup } from "./OptionsPopup";
 import { useRef, useState } from "react";

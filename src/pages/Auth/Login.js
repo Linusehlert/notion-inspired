@@ -1,7 +1,7 @@
 import { useLogin } from "../../hooks/auth/useLogin";
 import { useSignup } from "../../hooks/auth/useSignup";
 import { useState } from "react";
-import { ClimbingBoxLoader, HashLoader } from "react-spinners";
+import { HashLoader } from "react-spinners";
 
 export default function Login() {
   const [email, setEmail] = useState("");

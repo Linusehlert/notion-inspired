@@ -61,7 +61,7 @@ export const Card = ({ task, groupIndex }) => {
       className="border-neutral-150 group-1 relative mb-2 flex w-60 cursor-pointer flex-col rounded-lg border bg-white
         py-2 px-3 shadow-md hover:bg-neutral-100 "
     >
-      {/*Label*/}
+      {/*Labels*/}
       <h5 className="flex items-center font-normal text-neutral-400">
         {task &&
           task.labels &&
@@ -77,15 +77,42 @@ export const Card = ({ task, groupIndex }) => {
       <h3 className="mb-2 text-base font-bold text-neutral-700">
         {task && task.title}
       </h3>
-      <p className="mb-3 font-normal text-neutral-500">
-        {task && task.description.substring(0, 50)}...
-      </p>
-      <div className="border-neutral-150 flex items-center border-b pb-3">
-        {/*<div className="mr-2 h-5 w-5 rounded-full  bg-neutral-300" />*/}
-        <div className={`${color} rounded  px-1.5 text-xs font-normal`}>
-          {task && task.priority.length && task.priority}
+      {/*Description*/}
+      {task && task.description?.trim() !== "" && (
+        <p className="mb-3 font-normal text-neutral-500">
+          {task.description?.substring(0, 50) + "..."}
+        </p>
+      )}
+      <div className="mb-1 flex items-center">
+        {/*Assignees*/}
+        {task &&
+          task.assignees &&
+          task.assignees.slice(0, 3).map((assignee) =>
+            assignee.photoUrl ? (
+              <img
+                key={assignee.id}
+                src={assignee.photoUrl}
+                alt={assignee.displayName}
+                className="mr-2 h-5 w-5 rounded-full"
+              />
+            ) : (
+              <div
+                key={assignee.id}
+                className="mr-2 flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-xs
+              "
+              >
+                <span className="text-center text-white">
+                  {assignee.displayName && assignee.displayName[0]}
+                </span>
+              </div>
+            )
+          )}
+        {/*Priority*/}
+        <div className={`${color} rounded  px-1.5 py-0.5 text-xs`}>
+          {task && task.priority?.length && task.priority}
         </div>
       </div>
+      {/*Delete Button*/}
       <button
         onClick={(e) => {
           e.preventDefault();
@@ -108,7 +135,8 @@ export const Card = ({ task, groupIndex }) => {
           />
         </svg>
       </button>
-      <Modal open={isOpen}>
+      {/*Verify Delete*/}
+      <Modal open={isOpen} setOpen={setIsOpen}>
         <div
           onClick={(e) => {
             e.preventDefault();

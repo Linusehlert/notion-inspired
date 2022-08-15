@@ -96,7 +96,7 @@ export const TaskHeader = ({ task }) => {
           Copied Url to Clipboard
         </div>
       )}
-      <Modal open={isOpen}>
+      <Modal open={isOpen} setOpen={setIsOpen}>
         <div
           ref={modalRef}
           className="flex w-80 flex-col items-center justify-center rounded bg-white p-6"

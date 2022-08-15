@@ -7,7 +7,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../firebase/config";
-import { useLocation, useNavigate, Navigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { BarLoader } from "react-spinners";
 
@@ -70,6 +70,8 @@ export const AcceptInvite = () => {
             developers: arrayUnion(newUser),
             users: arrayUnion(userId),
           });
+          break;
+        default:
           break;
       }
     }

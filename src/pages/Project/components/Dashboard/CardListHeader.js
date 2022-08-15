@@ -188,7 +188,7 @@ export const CardListHeader = ({ index }) => {
         </div>
       )}
       {/*modal to verify delete*/}
-      <Modal open={dIsOpen}>
+      <Modal open={dIsOpen} setOpen={setDIsOpen}>
         <div
           ref={modalRef}
           className="flex w-80 flex-col items-center justify-center rounded bg-white p-6"

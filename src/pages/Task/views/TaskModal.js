@@ -10,12 +10,11 @@ import { TaskStatus } from "../components/TaskStatus";
 import { TaskPriority } from "../components/TaskPriority";
 import { TaskDescription } from "../components/TaskDescription";
 import { TaskHeader } from "../components/TaskHeader";
+import { TaskAssignees } from "../components/TaskAssignees";
 
 export const TaskModal = ({ task, taskIndex, groupIndex }) => {
   const [commentsOpen, setCommentsOpen] = useState(false);
-  const { projectTitle, projectGroups, projectId } = useSelector(
-    (state) => state.project
-  );
+  const { projectGroups, projectId } = useSelector((state) => state.project);
 
   const modalRef = useRef();
 
@@ -31,7 +30,6 @@ export const TaskModal = ({ task, taskIndex, groupIndex }) => {
     const newTasks = structuredClone(newGroup.tasks);
     newTasks[taskIndex] = newTask;
     newGroups[groupIndex] = { ...newGroup, tasks: newTasks };
-    console.log(newGroups);
     updateProject(projectId, {
       groups: newGroups,
     });
@@ -60,24 +58,7 @@ export const TaskModal = ({ task, taskIndex, groupIndex }) => {
             {/*Label*/}
             <TaskLabel task={task} updateTask={updateTask} />
             {/*Assignee*/}
-            <div className="mb-1 flex">
-              {/*property*/}
-              <div className="flex w-40 cursor-pointer items-center rounded py-1 px-1  hover:bg-neutral-200">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-3.5 w-3.5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-                </svg>
-                <p className="ml-2 ">Assignees</p>
-              </div>
-              {/*value*/}
-              <div className="ml-2 flex w-full cursor-pointer items-center rounded px-2 py-1 font-semibold text-neutral-700 hover:bg-neutral-200">
-                {task && task.assignees && task.assignees[0].name}
-              </div>
-            </div>
+            <TaskAssignees task={task} updateTask={updateTask} />
             {/*Status*/}
             <TaskStatus
               task={task}

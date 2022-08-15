@@ -1,8 +1,6 @@
-import { useClickOutside } from "../../hooks/useClickOutside";
 import ReactDOM from "react-dom";
 
-export default function Modal({ children, open, modalRef }) {
-  useClickOutside(modalRef, () => open(false));
+export default function Modal({ children, open }) {
   if (!open) return null;
 
   return ReactDOM.createPortal(

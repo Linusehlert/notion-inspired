@@ -4,7 +4,7 @@ import { useFirestore } from "../../../../hooks/firestore/useFirestore";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export const AddCard = ({ index }) => {
-  const { userId, userName } = useSelector((state) => state.user);
+  const { userId, userPhoto, userName } = useSelector((state) => state.user);
   const { projectGroups, projectId } = useSelector((state) => state.project);
   const group = useSelector((state) => state.project.projectGroups[index]);
 
@@ -23,10 +23,10 @@ export const AddCard = ({ index }) => {
     const newCard = {
       title: "untitled",
       id,
-      labels: [""],
-      assignees: [{ id: userId, name: userName }],
+      labels: ["undefined"],
+      assignees: [{ id: userId, photoUrl: userPhoto, displayName: userName }],
       priority: "None",
-      description: "Bubatz",
+      description: "",
       comments: [],
     };
     newTasks.push(newCard);
@@ -34,6 +34,7 @@ export const AddCard = ({ index }) => {
     // update the project
     updateProject(projectId, {
       groups: newGroups,
+      labelOptions: ["undefined"],
     });
     navigate(`${location.pathname}/${id}?view=center`);
   };
