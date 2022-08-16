@@ -72,6 +72,7 @@ export const useFirestore = (col) => {
       managers: [],
       developers: [],
       groups: [{ bgColor: randomBgColor, title: "No Status", tasks: [] }],
+      labelOptions: ["undefined"],
     })
       .then((addedDocument) => {
         navigate(`/${addedDocument.id}`);
@@ -79,7 +80,6 @@ export const useFirestore = (col) => {
       })
       .catch((err) => {
         dispatch({ type: "ERROR", payload: err.message });
-        console.log(err.message);
       });
   };
 

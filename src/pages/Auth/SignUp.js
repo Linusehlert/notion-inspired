@@ -1,10 +1,12 @@
 import { useSignup } from "../../hooks/auth/useSignup";
 import { useState } from "react";
+import { useLogin } from "../../hooks/auth/useLogin";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
+  const { login } = useLogin();
   const { connectGoogle, signup, isPending, error } = useSignup();
 
   const handleClick = (e) => {
@@ -17,16 +19,28 @@ export default function SignUp() {
     signup(email, password, displayName);
   };
 
+  const demoLogin = (e) => {
+    e.preventDefault();
+    login("demo@demo.de", "DemoDemo");
+  };
+
   return (
     <div className="flex h-screen flex-col items-center justify-center">
-      <div className="w-[350px]">
+      <div className="w-5/6 md:w-[350px]">
         <h2 className="mb-8 text-center text-5xl font-bold">Sign Up</h2>
+        <button
+          onClick={demoLogin}
+          disabled={isPending}
+          className="border-light focus:bg-gray mt-3  w-full rounded border py-1.5 font-semibold"
+        >
+          Login with Demo Account
+        </button>
         {/*Google Auth*/}
         <div className="border-line flex justify-center border-b">
           <button
             onClick={handleClick}
             disabled={isPending}
-            className=" text-text-head border-light focus:bg-gray my-5 flex w-[350px] items-center justify-center rounded border bg-white p-1.5
+            className=" text-text-head border-light focus:bg-gray my-5 flex w-full items-center justify-center rounded border bg-white p-1.5
                             font-semibold"
           >
             <svg
@@ -64,7 +78,7 @@ export default function SignUp() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder={"Enter your email..."}
-              className="bg-gray border-light my-1 w-[350px] rounded border py-1.5 px-3"
+              className="bg-gray border-light my-1 w-full rounded border py-1.5 px-3"
             />
           </label>
           <label className="mt-2 flex flex-col">
@@ -75,7 +89,7 @@ export default function SignUp() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder={"Enter Password..."}
-              className="bg-gray border-light my-1 w-[350px] rounded border py-1.5 px-3"
+              className="bg-gray border-light my-1 w-full rounded border py-1.5 px-3"
             />
           </label>
           <label className="mt-2 flex flex-col">
@@ -86,13 +100,13 @@ export default function SignUp() {
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               placeholder={"Enter Name..."}
-              className="bg-gray border-light my-1 w-[350px] rounded border py-1.5 px-3"
+              className="bg-gray border-light my-1 w-full rounded border py-1.5 px-3"
             />
           </label>
           <button
             type="submit"
             disabled={isPending}
-            className="border-light focus:bg-gray mt-3  w-[350px] rounded border py-1.5
+            className="border-light focus:bg-gray mt-3  w-full rounded border py-1.5
                             font-semibold"
           >
             Sign Up with email
@@ -101,7 +115,7 @@ export default function SignUp() {
         {error && <p className="text-sm text-red-500">{error}</p>}
         {/*Some small Text to make it look professional*/}
       </div>
-      <p className="text-text-light mt-28 w-[500px] text-center text-xs">
+      <p className="mt-28 w-5/6 text-center text-xs text-neutral-500 md:w-[500px]">
         By clicking “Continue with Google” or “Sign Up with email” above, you
         acknowledge that you have read and understood, and agree to nothing.
       </p>

@@ -21,7 +21,6 @@ export const TaskPriority = ({ task, updateTask }) => {
   useEffect(() => {
     if (task) {
       setPriority(task.priority);
-      console.log(task.priority);
       switch (task.priority) {
         case "Low":
           setColor("bg-green-100 text-green-500");
@@ -44,7 +43,7 @@ export const TaskPriority = ({ task, updateTask }) => {
   return (
     <div className="mb-1 flex">
       {/*property*/}
-      <div className="flex w-40 cursor-pointer items-center rounded py-1 px-1  hover:bg-neutral-200">
+      <div className="flex w-32 cursor-pointer items-center rounded py-1 px-1 hover:bg-neutral-200  md:w-40">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-3.5 w-3.5"

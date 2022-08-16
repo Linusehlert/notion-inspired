@@ -43,7 +43,7 @@ export const ProjectTitle = () => {
       onChange={(e) => setTitle(e.target.value)}
       value={title}
       placeholder={projectTitle}
-      className="h-12 w-[calc(100vw-22rem)] grow-0 text-4xl font-bold text-neutral-700 outline-none md:w-[calc(100vw-40rem)]"
+      className="h-12  w-[calc(100vw-13rem)] grow-0 text-4xl font-bold text-neutral-700 outline-none"
     ></input>
   );
 };

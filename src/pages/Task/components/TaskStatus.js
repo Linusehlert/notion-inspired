@@ -22,7 +22,6 @@ export const TaskStatus = ({ task, groupIndex, taskIndex }) => {
     const oldTasks = structuredClone(oldGroup.tasks);
     oldTasks.splice(taskIndex, 1);
     newGroups[groupIndex] = { ...oldGroup, tasks: oldTasks };
-    console.log(oldTasks);
     //add task to new group
 
     const newTasks = structuredClone(newGroups[newGroupIndex].tasks);
@@ -50,7 +49,7 @@ export const TaskStatus = ({ task, groupIndex, taskIndex }) => {
   return (
     <div className="relative  mb-1 flex">
       {/*property*/}
-      <div className="flex w-40 cursor-pointer items-center rounded py-1 px-1  hover:bg-neutral-200">
+      <div className="flex w-32 cursor-pointer items-center rounded py-1 px-1 hover:bg-neutral-200  md:w-40">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-3.5 w-3.5"

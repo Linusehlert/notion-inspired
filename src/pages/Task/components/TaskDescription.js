@@ -24,7 +24,7 @@ export const TaskDescription = ({ task, updateTask }) => {
         onChange={(e) => setDescription(e.target.value)}
         value={description}
         placeholder="text here"
-        className="h-full  w-full resize-none rounded px-14 py-6  text-base font-normal text-neutral-500 outline-none scrollbar-thin scrollbar-thumb-neutral-200"
+        className="h-full  w-full resize-none rounded  px-7 py-6 text-base  font-normal text-neutral-500 outline-none scrollbar-thin scrollbar-thumb-neutral-200 md:px-14"
       ></textarea>
     </div>
   );

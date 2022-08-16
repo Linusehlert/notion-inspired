@@ -76,8 +76,6 @@ function App() {
     }
   }, [location, dispatch]);
 
-  console.log(inviteLink, lastUrl);
-
   return (
     <>
       {authReady && (

@@ -77,7 +77,7 @@ export const CardListHeader = ({ index }) => {
   return (
     <div
       ref={headerRef}
-      className={`mb-2 flex w-60 px-2 py-1.5 text-white ${
+      className={`mb-2 flex w-60 px-2.5 py-1.5 text-white ${
         group && group.bgColor
       } relative rounded`}
     >

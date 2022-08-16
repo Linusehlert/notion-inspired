@@ -18,9 +18,7 @@ export const TaskHeader = ({ task }) => {
     }, 1000);
   };
 
-  const deleteTask = () => {
-    console.log("delete task");
-  };
+  const deleteTask = () => {};
 
   return (
     <div className="flex items-center p-2 text-sm">

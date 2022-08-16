@@ -16,10 +16,8 @@ export const Card = ({ task, groupIndex }) => {
   const { updateDocument: updateProject } = useFirestore("projects");
 
   const deleteTask = () => {
-    console.log("delete task");
     const newGroups = structuredClone(projectGroups);
     const newGroup = structuredClone(newGroups[groupIndex]);
-    console.log(groupIndex);
     let newTasks = structuredClone(newGroup.tasks);
     newTasks = newTasks.filter((t) => t.id !== task.id);
     newGroup.tasks = newTasks;

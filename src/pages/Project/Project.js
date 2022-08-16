@@ -11,7 +11,6 @@ export default function Project() {
   const { pathname } = useLocation();
   const id = pathname.length >= 22 ? pathname.substring(1, 21) : pathname;
   const { projectId } = useSelector((state) => state.project);
-  console.log(id);
 
   // firestore
   const { isPending, error } = useDocument("projects", id);

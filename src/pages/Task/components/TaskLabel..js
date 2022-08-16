@@ -22,7 +22,6 @@ export const TaskLabel = ({ task, updateTask }) => {
       updateTask(newTask);
       if (!labelOptions.includes(newLabel)) {
         const newLabelOptions = [...labelOptions, newLabel];
-        console.log(newLabelOptions);
         updateProject(projectId, {
           labelOptions: newLabelOptions,
         });
@@ -54,7 +53,6 @@ export const TaskLabel = ({ task, updateTask }) => {
     setLabels([]);
     if (task && task.labels) {
       task.labels.forEach((label, index) => {
-        console.log(label, index);
         if (label !== "") {
           setLabels((prevState) => [...prevState, label]);
         }
@@ -70,7 +68,7 @@ export const TaskLabel = ({ task, updateTask }) => {
   return (
     <div className="mb-1 flex">
       {/*property*/}
-      <div className="flex w-40 cursor-pointer items-center rounded py-1 px-1  hover:bg-neutral-200">
+      <div className="flex w-32 cursor-pointer items-center rounded py-1 px-1 hover:bg-neutral-200  md:w-40">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-3.5 w-3.5"

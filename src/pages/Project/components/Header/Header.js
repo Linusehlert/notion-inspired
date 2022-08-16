@@ -4,11 +4,11 @@ import { ProjectTitle } from "./ProjectTitle";
 export const Header = () => {
   return (
     <div>
-      <div className="w-100 max-w-screen px-12 pt-6">
+      <div className="w-100 max-w-screen px-4 pt-6 md:px-12">
         <div className="flex items-center">
           {/*Title Input*/}
           <ProjectTitle />
-          <div className="shrink-1 ml-auto flex grow-0">
+          <div className="ml-auto flex shrink-0 grow-0">
             {/*Team Members*/}
             <TeamMembers />
             {/*Dark Mode*/}

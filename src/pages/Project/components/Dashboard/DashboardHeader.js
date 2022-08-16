@@ -1,9 +1,8 @@
 export const DashboardHeader = () => {
-  console.log("DashboardHeader");
   return (
     <div className="border-neutral-150 box-border flex overflow-hidden border-b">
       {/*views*/}
-      <ul className="flex items-center pl-12">
+      <ul className="flex items-center pl-4 md:pl-12">
         <li className="box-border cursor-pointer border-b-2 border-blue-500 pb-2 text-blue-500 hover:border-b-2 hover:border-blue-500 hover:text-blue-500">
           By Status
         </li>
@@ -17,7 +16,7 @@ export const DashboardHeader = () => {
           Due Tasks
         </li>
       </ul>
-      <div className="ml-auto mr-12 flex ">
+      <div className="ml-auto mr-4 flex md:mr-12 ">
         {/*Filters*/}
         <ul className="mb-2 flex items-center ">
           <li className="">Filter</li>

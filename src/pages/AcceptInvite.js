@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { BarLoader } from "react-spinners";
 
 export const AcceptInvite = () => {
+  const [isPending, setIsPending] = useState(true);
   const [projectId, setProjectId] = useState(null);
   const [projectTitle, setProjectTitle] = useState(null);
   const [users, setUsers] = useState(null);
@@ -28,6 +29,7 @@ export const AcceptInvite = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    setIsPending(true);
     const docRef = doc(db, "invites", inviteId);
     getDoc(docRef).then((docSnap) => {
       if (docSnap.exists()) {
@@ -39,8 +41,8 @@ export const AcceptInvite = () => {
         setRole(docSnap.data().role);
         setExpirationDate(docSnap.data().expirationDate);
       }
-      console.log(docSnap.data());
     });
+    setIsPending(false);
   }, [inviteId]);
 
   const acceptInvite = async () => {
@@ -83,13 +85,14 @@ export const AcceptInvite = () => {
 
   if (!userId) return <Navigate to="/login" replace />;
 
-  if (!inviterId) {
+  if (isPending) {
     return (
       <div className="flex h-screen w-full items-center justify-center ">
         <BarLoader color={"#123abc"} />
       </div>
     );
   }
+  if (!inviterId) return <Navigate to="/login" replace />;
 
   return (
     <div className=" flex h-screen w-full flex-col items-center">

@@ -3,7 +3,7 @@ import { OptionsPopup } from "./OptionsPopup";
 import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
-export const ProfileSection = () => {
+export const ProfileSection = ({ setNavOpen }) => {
   //modal
   const [pIsOpen, setPIsOpen] = useState(false);
   const profileRef = useRef();
@@ -29,19 +29,43 @@ export const ProfileSection = () => {
           <h5 className="font-semibold text-neutral-800">{userName}</h5>
           <small className="text-xs text-neutral-500">Free Plan</small>
         </div>
-        <div className="ml-auto flex h-10 flex-col justify-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 fill-neutral-500"
-            viewBox="0 0 20 20"
-            fill="currentColor"
+        {/*<div className="ml-2 flex h-10 flex-col justify-center">*/}
+        {/*  <svg*/}
+        {/*    xmlns="http://www.w3.org/2000/svg"*/}
+        {/*    className="h-5 w-5 fill-neutral-500"*/}
+        {/*    viewBox="0 0 20 20"*/}
+        {/*    fill="currentColor"*/}
+        {/*  >*/}
+        {/*    <path*/}
+        {/*      fillRule="evenodd"*/}
+        {/*      d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"*/}
+        {/*      clipRule="evenodd"*/}
+        {/*    />*/}
+        {/*  </svg>*/}
+        {/*</div>*/}
+        <div className="ml-auto flex h-10 flex-col justify-center ">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setNavOpen(false);
+            }}
+            className="rounded p-1 text-neutral-500 hover:bg-neutral-300"
           >
-            <path
-              fillRule="evenodd"
-              d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
-              clipRule="evenodd"
-            />
-          </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
+              />
+            </svg>
+          </button>
         </div>
         {/*Profile Options Popup*/}
         <OptionsPopup isOpen={pIsOpen} />

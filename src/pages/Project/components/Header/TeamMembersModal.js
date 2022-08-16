@@ -42,9 +42,9 @@ export const TeamMembersModal = ({ open, setOpen, modalRef }) => {
     <Modal open={open} setOpen={setOpen}>
       <div
         ref={modalRef}
-        className="relative z-50 h-5/6 w-[800px] cursor-text rounded bg-white text-sm font-semibold text-neutral-500"
+        className="relative z-50 h-5/6 w-full cursor-text rounded bg-white text-sm font-semibold text-neutral-500 md:w-[800px]"
       >
-        <div className="px-12 py-4">
+        <div className="py-4 px-4 md:px-12">
           <div className="  relative py-2 px-3">
             {projectTitle + " "}/
             <span className="text-neutral-700"> Manage Team</span>
@@ -58,8 +58,8 @@ export const TeamMembersModal = ({ open, setOpen, modalRef }) => {
             Team Members
           </h3>
           {/*Admins*/}
-          <div className="flex w-full justify-between p-3">
-            <div className="mr-4 w-52  ">
+          <div className=" flex w-full flex-col justify-between p-3 md:flex-row">
+            <div className="mr-4 w-full md:w-52  ">
               <div className="mb-2 flex w-full items-center  ">
                 <h3 className="p-0.5 text-base">Admins</h3>
                 {/*Invite Button*/}
@@ -84,6 +84,7 @@ export const TeamMembersModal = ({ open, setOpen, modalRef }) => {
                 </button>
               </div>
               {/*Admins List*/}
+
               {projectAdmins.map((admin) => (
                 <div className="mb-2 flex items-center ">
                   {admin.photoUrl && (
@@ -119,7 +120,7 @@ export const TeamMembersModal = ({ open, setOpen, modalRef }) => {
               ))}
             </div>
             {/*Managers*/}
-            <div className="mr-4 w-52  ">
+            <div className="mr-4 w-full md:w-52  ">
               <div className=" mb-2 flex w-full items-center ">
                 <h3 className="p-0.5  text-base">Managers</h3>
                 <button
@@ -177,7 +178,7 @@ export const TeamMembersModal = ({ open, setOpen, modalRef }) => {
               ))}
             </div>
             {/*Developers*/}
-            <div className="w-52 ">
+            <div className="w-full md:w-52 ">
               <div className="mr-4 mb-2 flex w-full items-center py-0.5">
                 <h3 className="p-0.5 text-base">Developers</h3>
                 <button

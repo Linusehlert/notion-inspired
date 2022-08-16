@@ -34,7 +34,6 @@ export const AddCard = ({ index }) => {
     // update the project
     updateProject(projectId, {
       groups: newGroups,
-      labelOptions: ["undefined"],
     });
     navigate(`${location.pathname}/${id}?view=center`);
   };

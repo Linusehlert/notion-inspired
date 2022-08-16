@@ -33,7 +33,7 @@ export const TaskAssignees = ({ task, updateTask }) => {
   return (
     <div className="mb-1 flex">
       {/*property*/}
-      <div className="flex w-40 cursor-pointer items-center rounded py-1 px-1  hover:bg-neutral-200">
+      <div className="flex w-32 cursor-pointer items-center rounded py-1 px-1 hover:bg-neutral-200  md:w-40">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-3.5 w-3.5"
@@ -93,9 +93,9 @@ export const TaskAssignees = ({ task, updateTask }) => {
             ))}
           {/*  Dropdown*/}
           {isOptionsOpen && (
-            <div className="border-neutral-150 absolute top-7 left-0 z-50 box-border flex flex w-full   rounded border  bg-white  shadow-lg">
-              <div className="ml-1 ">
-                <h2 className=" my-1 ml-1  w-40 text-neutral-500">Admins</h2>
+            <div className="border-neutral-150 absolute top-7 left-0 z-50 box-border flex w-full flex-col rounded border bg-white pl-2 shadow-lg md:flex-row">
+              <div>
+                <h2 className=" my-1  w-40 text-neutral-500">Admins</h2>
                 {projectAdmins &&
                   projectAdmins.map((admin) => (
                     <div
@@ -104,7 +104,7 @@ export const TaskAssignees = ({ task, updateTask }) => {
                         addAssignee(admin);
                       }}
                       key={admin.id}
-                      className="mb-1 mr-3 ml-1 flex  items-center  rounded-lg rounded-l-3xl  hover:bg-neutral-200"
+                      className="mb-1 mr-3  flex  items-center  rounded-lg rounded-l-3xl  hover:bg-neutral-200"
                     >
                       {admin.photoUrl ? (
                         <img
@@ -128,7 +128,7 @@ export const TaskAssignees = ({ task, updateTask }) => {
                   ))}
               </div>
               <div>
-                <h2 className=" my-1 ml-1 w-40  text-neutral-500">Managers</h2>
+                <h2 className=" my-1  w-40  text-neutral-500">Managers</h2>
                 {projectManagers &&
                   projectManagers.map((manager) => (
                     <div
@@ -161,9 +161,7 @@ export const TaskAssignees = ({ task, updateTask }) => {
                   ))}
               </div>
               <div>
-                <h2 className=" my-1 ml-1 w-40  text-neutral-500">
-                  Developers
-                </h2>
+                <h2 className=" my-1  w-40  text-neutral-500">Developers</h2>
                 {projectDevelopers &&
                   projectDevelopers.map((developer) => (
                     <div

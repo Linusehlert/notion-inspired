@@ -20,7 +20,7 @@ export const GroupList = () => {
   };
 
   return (
-    <div className=" mt-6 flex h-[calc(100vh-151px)] overflow-x-auto px-12 scrollbar scrollbar-thumb-neutral-200">
+    <div className=" mt-6 flex h-[calc(100vh-151px)] overflow-x-auto px-4 scrollbar scrollbar-thumb-neutral-200 md:px-12">
       {projectGroups &&
         projectGroups.map((group, index) => (
           <CardList key={index} groupIndex={index} />

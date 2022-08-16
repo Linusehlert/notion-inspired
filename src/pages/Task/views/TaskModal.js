@@ -45,10 +45,10 @@ export const TaskModal = ({ task, taskIndex, groupIndex }) => {
     <div className="col fixed inset-0 z-30 flex flex cursor-pointer items-center justify-center bg-black/50">
       <div
         ref={modalRef}
-        className="relative z-50 h-5/6 w-[800px] cursor-text rounded bg-white text-sm font-semibold text-neutral-500"
+        className="relative z-50 h-5/6 w-full cursor-text rounded bg-white text-sm font-semibold text-neutral-500 md:w-[800px]"
       >
         {/*top section*/}
-        <div className="px-12 py-4">
+        <div className=" px-4 py-4 md:px-12">
           {/*header*/}
           <TaskHeader task={task} />
           {/*title*/}
@@ -70,7 +70,7 @@ export const TaskModal = ({ task, taskIndex, groupIndex }) => {
           </div>
         </div>
         {/*text section header*/}
-        <ul className="border-neutral-150 flex items-center border-b px-14 text-neutral-500">
+        <ul className="border-neutral-150 flex items-center border-b px-6 text-neutral-500 md:px-14">
           <li
             className={`mx-1 cursor-pointer pb-2 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 
           ${commentsOpen ? "" : "border-b-2 border-blue-500 text-blue-500"}`}

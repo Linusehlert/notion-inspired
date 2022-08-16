@@ -75,7 +75,6 @@ export const useSignup = () => {
           .then((docSnap) => {
             if (docSnap.exists()) {
               const { displayName, email, photoUrl, lastUrl } = docSnap.data();
-              console.log(lastUrl);
               dispatch(
                 setActiveUser({
                   userName: displayName,
